@@ -1,0 +1,14 @@
+{
+  "parry": {
+    "subtitle": "subtitles.ultraeffects.parry",
+    "sounds": [
+      "ultraeffects:parry"
+    ]
+  },
+  "gabriel": {
+    "subtitle": "subtitles.ultraeffects.gabriel",
+    "sounds": [
+      "ultraeffects:gabriel"
+    ]
+  }
+}

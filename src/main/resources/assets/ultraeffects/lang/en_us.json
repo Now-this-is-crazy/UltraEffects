@@ -1,0 +1,15 @@
+{
+  "ultraeffects.midnightconfig.title": "Ultra Effects",
+
+  "ultraeffects.midnightconfig.flashTicks": "Flash Ticks",
+  "ultraeffects.midnightconfig.flashTicks.tooltip": "The amount of ticks the flash effect should be displayed.",
+
+  "ultraeffects.midnightconfig.freezeTicks": "Freeze Ticks",
+  "ultraeffects.midnightconfig.freezeTicks.tooltip": "The amount of ticks the screen should freeze for when performing parries and whatnot.",
+
+  "ultraeffects.midnightconfig.gabrielPercentage": "Gabriel Percentage",
+  "ultraeffects.midnightconfig.gabrielPercentage.tooltip": "The percentage of health you have to have left before gabriel starts appearing on your screen.",
+
+  "subtitles.ultraeffects.parry": "Something clings",
+  "subtitles.ultraeffects.gabriel": "MACHINE!"
+}
