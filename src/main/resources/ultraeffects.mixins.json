@@ -5,6 +5,7 @@
   "client": [
     "LivingEntityMixin",
     "ProjectileEntityMixin",
+    "effect.InGameHudAccessor",
     "effect.InGameHudMixin",
     "effect.MinecraftClientMixin"
   ],

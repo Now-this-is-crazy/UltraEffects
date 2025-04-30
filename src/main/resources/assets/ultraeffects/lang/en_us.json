@@ -1,15 +1,31 @@
 {
   "ultraeffects.midnightconfig.title": "Ultra Effects",
 
-  "ultraeffects.midnightconfig.flashTicks": "Flash Ticks",
-  "ultraeffects.midnightconfig.flashTicks.tooltip": "The amount of ticks the flash effect should be displayed.",
 
-  "ultraeffects.midnightconfig.freezeTicks": "Freeze Ticks",
-  "ultraeffects.midnightconfig.freezeTicks.tooltip": "The amount of ticks the screen should freeze for when performing parries and whatnot.",
+  "ultraeffects.midnightconfig.parryCategory": "§aParries & Mace Hits",
 
-  "ultraeffects.midnightconfig.gabrielPercentage": "Gabriel Percentage",
-  "ultraeffects.midnightconfig.gabrielPercentage.tooltip": "The percentage of health you have to have left before gabriel starts appearing on your screen.",
+  "ultraeffects.midnightconfig.parryFlashTicks": "Flash Ticks",
+  "ultraeffects.midnightconfig.parryFlashTicks.tooltip": "The amount of ticks the flash effect should be displayed.",
+  "ultraeffects.midnightconfig.parryFreezeTicks": "Freeze Ticks",
+  "ultraeffects.midnightconfig.parryFreezeTicks.tooltip": "The amount of ticks the screen should freeze for when performing parries and whatnot.",
+  "ultraeffects.midnightconfig.parryImages": "Flash Images",
+  "ultraeffects.midnightconfig.parryImages.tooltip": "The images that should be used for flashes. §cMust §rbe §a.png §rfiles and put under §aultraeffects/assets/textures/misc/§r.",
 
-  "subtitles.ultraeffects.parry": "Something clings",
+  "ultraeffects.midnightconfig.gabrielCategory": "§aEternal Gabriel",
+
+  "ultraeffects.midnightconfig.gabrielImages": "Gabriel Images",
+  "ultraeffects.midnightconfig.gabrielImages.tooltip": "The images that should be used as overlayS. §cMust §rbe §a.png §rfiles and put under §aultraeffects/assets/textures/misc/§r.",
+  "ultraeffects.midnightconfig.gabrielThresholdMode": "Threshold Mode",
+  "ultraeffects.midnightconfig.gabrielThreshold": "Health Threshold",
+  "ultraeffects.midnightconfig.gabrielThreshold.tooltip": "The threshold of health you have to have left before gabriel starts appearing on your screen.",
+  "ultraeffects.midnightconfig.gabrielWaitTicks": "Wait Ticks",
+  "ultraeffects.midnightconfig.gabrielWaitTicks.tooltip": "The amount of ticks to wait before displaying the next image.",
+  "ultraeffects.midnightconfig.gabrielFlashTicks": "Flash Ticks",
+  "ultraeffects.midnightconfig.gabrielFlashTicks.tooltip": "The amount of ticks to flash the image of Gabriel on your screen.",
+
+  "ultraeffects.midnightconfig.enum.GabrielMode.REMAINING_HEALTH": "Remaining Health",
+  "ultraeffects.midnightconfig.enum.GabrielMode.HEALTH_PERCENTAGE": "Health Percentage",
+
+  "subtitles.ultraeffects.generic_clang": "Something clangs",
   "subtitles.ultraeffects.gabriel": "MACHINE!"
 }

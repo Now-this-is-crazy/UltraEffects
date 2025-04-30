@@ -1,8 +1,14 @@
 {
   "parry": {
-    "subtitle": "subtitles.ultraeffects.parry",
+    "subtitle": "subtitles.ultraeffects.generic_clang",
     "sounds": [
       "ultraeffects:parry"
+    ]
+  },
+  "hammer_impact": {
+    "subtitle": "subtitles.ultraeffects.generic_clang",
+    "sounds": [
+      "ultraeffects:hammer_impact"
     ]
   },
   "gabriel": {

@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import powercyphe.ultraeffects.UltraEffectsClient;
-import powercyphe.ultraeffects.effect.FlashEffect;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
 
 @Mixin(ProjectileEntity.class)
@@ -32,8 +31,8 @@ public abstract class ProjectileEntityMixin extends Entity implements Ownable {
             if (deflection == ProjectileDeflection.REDIRECTED) {
                 this.parryCooldown = this.age;
 
-                UltraEffectsUtil.playSound(UltraEffectsClient.PARRY, SoundCategory.PLAYERS, 0.5F, 1F);
-                FlashEffect.display();
+                UltraEffectsUtil.playSound(UltraEffectsClient.PARRY, SoundCategory.PLAYERS, 1F ,1F);
+                UltraEffectsUtil.parryEffect();
             }
         }
     }

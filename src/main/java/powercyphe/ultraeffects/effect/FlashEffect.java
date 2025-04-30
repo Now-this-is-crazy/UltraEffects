@@ -1,38 +1,48 @@
 package powercyphe.ultraeffects.effect;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 import powercyphe.ultraeffects.ModConfig;
-import powercyphe.ultraeffects.UltraEffectsClient;
+import powercyphe.ultraeffects.util.UltraEffectsUtil;
 
-public class FlashEffect {
-    public static Identifier FLASH_EFFECT_OVERLAY = UltraEffectsClient.id("textures/misc/flash.png");
+import java.util.List;
 
-    public static int flashTicks, lastFlashTicks, freezeTicks, lastFreezeTicks = 0;
+public class FlashEffect extends OverlayEffect {
+    public int flashTicks, lastFlashTicks = 0;
 
-    public static float getOpacity() {
-        return Math.min(((float) flashTicks / (float) lastFlashTicks) * 0.5F, 0.5F);
+    @Override
+    public void display() {
+        setRandomOverlay();
+
+        flashTicks = ModConfig.parryFlashTicks;
+        lastFlashTicks = flashTicks;
     }
 
-    public static boolean shouldPause() {
-        return freezeTicks > 0 && freezeTicks < lastFreezeTicks && !MinecraftClient.getInstance().isPaused();
-    }
-
-    public static void tick() {
-        if (freezeTicks > 0) {
-            freezeTicks--;
-        } else {
+    @Override
+    public void tick() {
+        if (!EffectRegistry.FREEZE_EFFECT.shouldPause()) {
             if (flashTicks > 0) {
                 flashTicks--;
             }
         }
     }
 
-    public static void display() {
-        flashTicks = ModConfig.flashTicks;
-        lastFlashTicks = flashTicks;
+    @Override
+    public void render(InGameHud inGameHud, DrawContext ctx, RenderTickCounter tickCounter) {
+        if (this.flashTicks > 0) {
+            UltraEffectsUtil.renderOverlay(inGameHud, ctx, this.getOverlay(), this.getOpacity());
+        }
+    }
 
-        freezeTicks = ModConfig.freezeTicks+1;
-        lastFreezeTicks = freezeTicks;
+    @Override
+    public List<Identifier> getAllOverlays() {
+        return UltraEffectsUtil.stringToIdentifierList(ModConfig.parryImages);
+    }
+
+    @Override
+    public float getOpacity() {
+        return Math.min(((float) flashTicks / (float) lastFlashTicks) * 0.5F, 0.5F);
     }
 }

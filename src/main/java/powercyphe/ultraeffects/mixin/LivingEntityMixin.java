@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import powercyphe.ultraeffects.UltraEffectsClient;
-import powercyphe.ultraeffects.effect.FlashEffect;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
 
 @Mixin(LivingEntity.class)
@@ -17,9 +16,14 @@ public class LivingEntityMixin {
 
     @Inject(method = "onDamaged", at = @At("HEAD"))
     private void ultraeffects$maceHit(DamageSource source, CallbackInfo ci) {
-        if (source.isOf(DamageTypes.MACE_SMASH) && UltraEffectsUtil.isClientPlayer(source.getAttacker())) {
-            UltraEffectsUtil.playSound(UltraEffectsClient.PARRY, SoundCategory.PLAYERS, 0.5F, 1F);
-            FlashEffect.display();
+        LivingEntity entity = (LivingEntity) (Object) this;
+
+        if (UltraEffectsUtil.isClientPlayer(source.getAttacker())) {
+            if (source.isOf(DamageTypes.MACE_SMASH)) {
+                UltraEffectsUtil.playSound(UltraEffectsClient.HAMMER_IMPACT, SoundCategory.PLAYERS, 1F, 1F);
+                UltraEffectsUtil.parryEffect();
+
+            }
         }
     }
 }

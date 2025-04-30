@@ -1,59 +1,71 @@
 package powercyphe.ultraeffects.effect;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.sound.EntityTrackingSoundInstance;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.random.Random;
 import powercyphe.ultraeffects.ModConfig;
 import powercyphe.ultraeffects.UltraEffectsClient;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
 
-import java.util.Arrays;
 import java.util.List;
 
-public class GabrielEffect {
-    public static List<Identifier> GABRIEL_EFFECT_OVERLAY = List.of(
-            UltraEffectsClient.id("textures/misc/gabriel1.png"),
-            UltraEffectsClient.id("textures/misc/gabriel2.png"),
-            UltraEffectsClient.id("textures/misc/gabriel3.png"),
-            UltraEffectsClient.id("textures/misc/gabriel4.png")
-    );
+public class GabrielEffect extends OverlayEffect {
+    public String overlay = ModConfig.gabrielImages.getFirst();
+    public int fadeTicks, lastFadeTicks, waitTicks = 0;
 
-    public static Identifier overlay = GABRIEL_EFFECT_OVERLAY.getFirst();
-    public static int fadeTicks, lastFadeTicks, waitTicks = 0;
+    @Override
+    public void display() {
+        setRandomOverlay();
 
-    public static float getOpacity() {
-        return Math.min(((float) fadeTicks / (float) lastFadeTicks) * 0.5F, 0.5F);
+        waitTicks = ModConfig.gabrielWaitTicks;
+        fadeTicks = ModConfig.gabrielFlashTicks;
+        lastFadeTicks = fadeTicks;
     }
 
-    public static void tick() {
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+    @Override
+    public void tick() {
+        ClientPlayerEntity player = UltraEffectsUtil.getClientPlayer();
 
-        if (fadeTicks > 0) {
-            fadeTicks--;
-        } else {
-            if (waitTicks > 0) {
-                waitTicks--;
-            } else if (player != null) {
-                if (!player.isDead() && player.getHealth() <= (player.getMaxHealth() * ((float) ModConfig.gabrielPercentage / 100)) ) {
-                    UltraEffectsUtil.playSound(UltraEffectsClient.GABRIEL, SoundCategory.PLAYERS, 0.5F, 1F);
-                    display();
+        if (!EffectRegistry.FREEZE_EFFECT.shouldPause()) {
+            if (fadeTicks > 0) {
+                fadeTicks--;
+            } else {
+                if (waitTicks > 0) {
+                    waitTicks--;
+                } else if (player != null) {
+                    float threshold = 0;
+                    switch (ModConfig.gabrielThresholdMode) {
+                        case HEALTH_PERCENTAGE -> threshold = (player.getMaxHealth() * ((float) ModConfig.gabrielThreshold / 100));
+                        case REMAINING_HEALTH -> threshold = ModConfig.gabrielThreshold;
+                    }
+
+                    if (!player.isDead() && player.getHealth() <= threshold) {
+                        UltraEffectsUtil.playSound(UltraEffectsClient.GABRIEL, SoundCategory.PLAYERS, 0.5F, 1F);
+                        display();
+                    }
                 }
             }
         }
     }
 
-    public static void display() {
-        DefaultedList<Identifier> available = DefaultedList.of();
-        available.addAll(GABRIEL_EFFECT_OVERLAY);
-        available.remove(overlay);
-        overlay = available.get(Random.create().nextBetween(0, available.size()-1));
-
-        waitTicks = 10;
-        fadeTicks = 10;
-        lastFadeTicks = fadeTicks;
+    @Override
+    public void render(InGameHud inGameHud, DrawContext ctx, RenderTickCounter tickCounter) {
+        if (this.fadeTicks > 0) {
+            UltraEffectsUtil.renderOverlay(inGameHud, ctx, this.getOverlay(), this.getOpacity());
+        }
     }
+
+    @Override
+    public List<Identifier> getAllOverlays() {
+        return UltraEffectsUtil.stringToIdentifierList(ModConfig.gabrielImages);
+    }
+
+    @Override
+    public float getOpacity() {
+        return Math.min(((float) fadeTicks / (float) lastFadeTicks) * 0.5F, 0.5F);
+    }
+
 }

@@ -8,7 +8,8 @@
 		"Powercyphe"
 	],
 	"contact": {
-		"homepage": "https://modrinth.com/mod/ultraeffects"
+		"homepage": "https://modrinth.com/mod/ultraeffects",
+		"sources": "https://github.com/Now-this-is-crazy/UltraEffects"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/ultraeffects/icon.png",
@@ -26,7 +27,7 @@
 	],
 	"depends": {
 		"fabricloader": "*",
-		"minecraft": "~1.21.5",
+		"minecraft": "~1.21",
 		"java": ">=21",
 		"fabric-api": "*"
 	}
