@@ -12,9 +12,9 @@ public class ModConfig extends MidnightConfig {
     public static Comment parryCategory;
 
     @Entry(min = 0, max = 20)
-    public static int parryFlashTicks = 4;
+    public static int parryFlashTicks = 6;
     @Entry(min = 0, max = 10)
-    public static int parryFreezeTicks = 2;
+    public static int parryFreezeTicks = 3;
 
     @Entry
     public static List<String> parryImages = Arrays.asList(
