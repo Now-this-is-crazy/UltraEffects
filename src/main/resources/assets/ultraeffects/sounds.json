@@ -16,5 +16,13 @@
     "sounds": [
       "ultraeffects:gabriel"
     ]
+  },
+  "style_meter_click": {
+    "sounds": [
+      {
+        "name": "minecraft:note/hat",
+        "pitch": 2
+      }
+    ]
   }
 }

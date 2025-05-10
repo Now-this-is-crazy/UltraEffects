@@ -1,8 +1,9 @@
-package powercyphe.ultraeffects.effect;
+package powercyphe.ultraeffects.registry;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import powercyphe.ultraeffects.UltraEffectsClient;
+import powercyphe.ultraeffects.effect.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,8 @@ public class EffectRegistry {
     public static final FlashEffect FLASH_EFFECT = register("flash", new FlashEffect());
     public static final FreezeEffect FREEZE_EFFECT = register("freeze", new FreezeEffect());
     public static final GabrielEffect GABRIEL_EFFECT = register("gabriel", new GabrielEffect());
+
+    public static final StyleMeterEffect STYLE_METER_EFFECT = register("style_meter", new StyleMeterEffect());
 
     public static <T extends ScreenEffect> T register(String id, T effect) {
         return register(UltraEffectsClient.id(id), effect);

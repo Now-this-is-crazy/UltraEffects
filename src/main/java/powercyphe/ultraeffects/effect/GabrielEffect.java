@@ -1,13 +1,13 @@
 package powercyphe.ultraeffects.effect;
 
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import powercyphe.ultraeffects.ModConfig;
-import powercyphe.ultraeffects.UltraEffectsClient;
+import powercyphe.ultraeffects.registry.EffectRegistry;
+import powercyphe.ultraeffects.registry.ModSounds;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class GabrielEffect extends OverlayEffect {
                     }
 
                     if (!player.isDead() && player.getHealth() <= threshold) {
-                        UltraEffectsUtil.playSound(UltraEffectsClient.GABRIEL, SoundCategory.PLAYERS, 0.5F, 1F);
+                        UltraEffectsUtil.playSound(ModSounds.GABRIEL, SoundCategory.PLAYERS, 0.5F, 1F);
                         display();
                     }
                 }
@@ -52,9 +52,9 @@ public class GabrielEffect extends OverlayEffect {
     }
 
     @Override
-    public void render(InGameHud inGameHud, DrawContext ctx, RenderTickCounter tickCounter) {
+    public void render(DrawContext ctx, RenderTickCounter tickCounter) {
         if (this.fadeTicks > 0) {
-            UltraEffectsUtil.renderOverlay(inGameHud, ctx, this.getOverlay(), this.getOpacity());
+            UltraEffectsUtil.renderOverlay(ctx, this.getOverlay(), this.getOpacity());
         }
     }
 

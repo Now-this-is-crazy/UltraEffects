@@ -1,20 +1,50 @@
 {
   "ultraeffects.midnightconfig.title": "Ultra Effects",
 
-
-  "ultraeffects.midnightconfig.parryCategory": "§aParries & Mace Hits",
+  "ultraeffects.midnightconfig.category.parry": "Parries & Mace Hits",
 
   "ultraeffects.midnightconfig.parryFlashTicks": "Flash Ticks",
   "ultraeffects.midnightconfig.parryFlashTicks.tooltip": "The amount of ticks the flash effect should be displayed.",
   "ultraeffects.midnightconfig.parryFreezeTicks": "Freeze Ticks",
   "ultraeffects.midnightconfig.parryFreezeTicks.tooltip": "The amount of ticks the screen should freeze for when performing parries and whatnot.",
+
+  "ultraeffects.midnightconfig.parryProjectilesEnabled": "Projectiles",
+  "ultraeffects.midnightconfig.parryMaceEnabled": "Mace Hits",
+  "ultraeffects.midnightconfig.parryShieldEnabled": "Shields",
+  "ultraeffects.midnightconfig.parryDeathProtectorEnabled": "Totem Popping",
+
   "ultraeffects.midnightconfig.parryImages": "Flash Images",
   "ultraeffects.midnightconfig.parryImages.tooltip": "The images that should be used for flashes. §cMust §rbe §a.png §rfiles and put under §aultraeffects/assets/textures/misc/§r.",
 
-  "ultraeffects.midnightconfig.gabrielCategory": "§aEternal Gabriel",
+
+  "ultraeffects.midnightconfig.category.styleMeter": "Style Meter",
+
+  "ultraeffects.midnightconfig.styleMeterDisplayCondition": "Display Condition",
+  "ultraeffects.midnightconfig.styleMeterDisplayCondition.tooltip": "The Condition whether or not the Style Meter should be displayed on Screen.",
+  "ultraeffects.midnightconfig.styleMeterPosition": "Display Position",
+  "ultraeffects.midnightconfig.styleMeterPosition.tooltip": "Where the Style Meter should be displayed.",
+  "ultraeffects.midnightconfig.styleMeterSound": "Display Sound",
+  "ultraeffects.midnightconfig.styleMeterSound.tooltip": "Whether or not a sound should be played during a style event.",
+
+  "ultraeffects.midnightconfig.styleMeterHideScoreboard": "Hide Scoreboard",
+  "ultraeffects.midnightconfig.styleMeterHideScoreboard.tooltip": "Whether or not the Style Meter should hide the scoreboard when active.",
+
+  "ultraeffects.midnightconfig.enum.StyleMeterMode.ALWAYS": "Always",
+  "ultraeffects.midnightconfig.enum.StyleMeterMode.ANY_STYLE": "Any Style",
+  "ultraeffects.midnightconfig.enum.StyleMeterMode.POINTS_ONLY": "Points Only",
+  "ultraeffects.midnightconfig.enum.StyleMeterMode.EVENTS_ONLY": "Events Only",
+  "ultraeffects.midnightconfig.enum.StyleMeterMode.NEVER": "Never",
+
+  "ultraeffects.midnightconfig.enum.StyleMeterPosition.TOP_LEFT": "Top Left",
+  "ultraeffects.midnightconfig.enum.StyleMeterPosition.BOTTOM_LEFT": "Bottom Left",
+  "ultraeffects.midnightconfig.enum.StyleMeterPosition.TOP_RIGHT": "Top Right",
+  "ultraeffects.midnightconfig.enum.StyleMeterPosition.BOTTOM_RIGHT": "Bottom Right",
+
+
+  "ultraeffects.midnightconfig.category.misc": "Eternal Gabriel & Misc",
 
   "ultraeffects.midnightconfig.gabrielImages": "Gabriel Images",
-  "ultraeffects.midnightconfig.gabrielImages.tooltip": "The images that should be used as overlayS. §cMust §rbe §a.png §rfiles and put under §aultraeffects/assets/textures/misc/§r.",
+  "ultraeffects.midnightconfig.gabrielImages.tooltip": "The images that should be used as overlays. §cMust §rbe §a.png §rfiles and put under §aultraeffects/assets/textures/misc/§r.",
   "ultraeffects.midnightconfig.gabrielThresholdMode": "Threshold Mode",
   "ultraeffects.midnightconfig.gabrielThreshold": "Health Threshold",
   "ultraeffects.midnightconfig.gabrielThreshold.tooltip": "The threshold of health you have to have left before gabriel starts appearing on your screen.",
@@ -25,6 +55,46 @@
 
   "ultraeffects.midnightconfig.enum.GabrielMode.REMAINING_HEALTH": "Remaining Health",
   "ultraeffects.midnightconfig.enum.GabrielMode.HEALTH_PERCENTAGE": "Health Percentage",
+
+  "ultraeffects.style_meter.none.prefix": "",
+  "ultraeffects.style_meter.none.suffix": "",
+  "ultraeffects.style_meter.destructive.prefix": "D",
+  "ultraeffects.style_meter.destructive.suffix": "estructive",
+  "ultraeffects.style_meter.chaotic.prefix": "C",
+  "ultraeffects.style_meter.chaotic.suffix": "haotic",
+  "ultraeffects.style_meter.brutal.prefix": "B",
+  "ultraeffects.style_meter.brutal.suffix": "rutal",
+  "ultraeffects.style_meter.anarchic.prefix": "A",
+  "ultraeffects.style_meter.anarchic.suffix": "narchic",
+  "ultraeffects.style_meter.supreme.prefix": "S",
+  "ultraeffects.style_meter.supreme.suffix": "upreme",
+  "ultraeffects.style_meter.ssadistic.prefix": "SS",
+  "ultraeffects.style_meter.ssadistic.suffix": "adistic",
+  "ultraeffects.style_meter.ssshitstorm.prefix": "SSS",
+  "ultraeffects.style_meter.ssshitstorm.suffix": "hitstorm",
+  "ultraeffects.style_meter.ultrakill.prefix": "ULTRAKILL",
+  "ultraeffects.style_meter.ultrakill.suffix": "",
+
+
+  "ultraeffects.style_meter.style.parry": "Parry",
+  "ultraeffects.style_meter.style.mace_smash": "Smashed",
+  "ultraeffects.style_meter.style.shield_break": "Guard Break",
+  "ultraeffects.style_meter.style.lightning_strike": "Electrocuted",
+  "ultraeffects.style_meter.style.deathprotector_use": "Totem Pop",
+
+  "ultraeffects.style_meter.style.combo_melee": "Hit-Combo x%1$s",
+  "ultraeffects.style_meter.style.combo_kill": "Multi-Kill x%1$s",
+  "ultraeffects.style_meter.style.combo_projectile": "Pierced x%1$s",
+
+  "ultraeffects.style_meter.style.kill": "Kill",
+  "ultraeffects.style_meter.style.kill_axe": "Beheaded",
+  "ultraeffects.style_meter.style.kill_trident": "Forked",
+  "ultraeffects.style_meter.style.kill_explosion": "Exploded",
+  "ultraeffects.style_meter.style.kill_fireworks": "Fireworks",
+
+  "ultraeffects.style_meter.style.bow_hit": "Arrow Shot",
+  "ultraeffects.style_meter.style.bow_hit_slow": "Slowpoke",
+  "ultraeffects.style_meter.style.bow_hit_far": "Sniped",
 
   "subtitles.ultraeffects.generic_clang": "Something clangs",
   "subtitles.ultraeffects.gabriel": "MACHINE!"

@@ -1,0 +1,11 @@
+STYLE METER
+- headshots
+- style meter position
+- pet kills
+
+ENCHANCEMENT COMPAT
+- disarm
+- thunderstruck
+- bury
+- meteor
+- apex crit

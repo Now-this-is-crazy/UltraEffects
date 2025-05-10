@@ -3,13 +3,18 @@
   "package": "powercyphe.ultraeffects.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "LivingEntityMixin",
     "ProjectileEntityMixin",
-    "effect.InGameHudAccessor",
-    "effect.InGameHudMixin",
-    "effect.MinecraftClientMixin"
+    "accessor.MinecraftClientAccessor",
+    "effect.MinecraftClientMixin",
+    "style_meter.ClientPlayerInteractionManagerMixin",
+    "style_meter.ClientPlayNetworkHandlerMixin",
+    "style_meter.InGameHudMixin",
+    "style_meter.LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "accessor.PersistentProjectileEntityAccessor"
+  ]
 }

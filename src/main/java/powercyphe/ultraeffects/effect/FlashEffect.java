@@ -1,10 +1,10 @@
 package powercyphe.ultraeffects.effect;
 
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 import powercyphe.ultraeffects.ModConfig;
+import powercyphe.ultraeffects.registry.EffectRegistry;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
 
 import java.util.List;
@@ -30,9 +30,9 @@ public class FlashEffect extends OverlayEffect {
     }
 
     @Override
-    public void render(InGameHud inGameHud, DrawContext ctx, RenderTickCounter tickCounter) {
+    public void render(DrawContext ctx, RenderTickCounter tickCounter) {
         if (this.flashTicks > 0) {
-            UltraEffectsUtil.renderOverlay(inGameHud, ctx, this.getOverlay(), this.getOpacity());
+            UltraEffectsUtil.renderOverlay(ctx, this.getOverlay(), this.getOpacity());
         }
     }
 

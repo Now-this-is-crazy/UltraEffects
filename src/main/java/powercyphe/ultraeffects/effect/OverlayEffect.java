@@ -14,7 +14,7 @@ public abstract class OverlayEffect extends TickingEffect {
     public static final String OVERLAY_PATH = "textures/misc/";
     private Identifier overlay;
 
-    public abstract void render(InGameHud inGameHud, DrawContext ctx, RenderTickCounter tickCounter);
+    public abstract void render(DrawContext ctx, RenderTickCounter tickCounter);
 
     public void setOverlay(Identifier id) {
         this.overlay = id;

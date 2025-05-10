@@ -6,7 +6,7 @@ import net.minecraft.client.util.Window;
 import net.minecraft.client.util.tracy.TracyFrameCapturer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import powercyphe.ultraeffects.effect.EffectRegistry;
+import powercyphe.ultraeffects.registry.EffectRegistry;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
