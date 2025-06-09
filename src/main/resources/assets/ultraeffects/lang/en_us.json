@@ -23,6 +23,8 @@
   "ultraeffects.midnightconfig.styleMeterDisplayCondition.tooltip": "The Condition whether or not the Style Meter should be displayed on Screen.",
   "ultraeffects.midnightconfig.styleMeterPosition": "Display Position",
   "ultraeffects.midnightconfig.styleMeterPosition.tooltip": "Where the Style Meter should be displayed.",
+  "ultraeffects.midnightconfig.styleMeterBackgroundOpacity": "Background Opacity",
+  "ultraeffects.midnightconfig.styleMeterBackgroundOpacity.tooltip": "Background Opacity of the Style Meter.",
   "ultraeffects.midnightconfig.styleMeterSound": "Display Sound",
   "ultraeffects.midnightconfig.styleMeterSound.tooltip": "Whether or not a sound should be played during a style event.",
 
@@ -56,8 +58,6 @@
   "ultraeffects.midnightconfig.enum.GabrielMode.REMAINING_HEALTH": "Remaining Health",
   "ultraeffects.midnightconfig.enum.GabrielMode.HEALTH_PERCENTAGE": "Health Percentage",
 
-  "ultraeffects.style_meter.none.prefix": "",
-  "ultraeffects.style_meter.none.suffix": "",
   "ultraeffects.style_meter.destructive.prefix": "D",
   "ultraeffects.style_meter.destructive.suffix": "estructive",
   "ultraeffects.style_meter.chaotic.prefix": "C",

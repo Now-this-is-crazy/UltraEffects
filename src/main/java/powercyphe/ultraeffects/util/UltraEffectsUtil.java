@@ -67,6 +67,10 @@ public class UltraEffectsUtil {
         return false;
     }
 
+    public static MinecraftClient getClient() {
+        return MinecraftClient.getInstance();
+    }
+
     public static ClientPlayerEntity getClientPlayer() {
         return MinecraftClient.getInstance().player;
     }

@@ -11,7 +11,7 @@
 		"homepage": "https://modrinth.com/mod/ultraeffects",
 		"sources": "https://github.com/Now-this-is-crazy/UltraEffects"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/ultraeffects/icon.png",
 	"environment": "client",
 	"entrypoints": {

@@ -6,19 +6,17 @@ import net.fabricmc.fabric.api.client.rendering.v1.LayeredDrawerWrapper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.ColorHelper;
 import powercyphe.ultraeffects.ModConfig;
 import powercyphe.ultraeffects.UltraEffectsClient;
-import powercyphe.ultraeffects.registry.EffectRegistry;
 import powercyphe.ultraeffects.effect.StyleMeterEffect;
+import powercyphe.ultraeffects.registry.EffectRegistry;
 
 public class StyleMeterHud implements HudLayerRegistrationCallback {
-    public static final Identifier TEXTURE = UltraEffectsClient.id("textures/gui/sprites/hud/style_meter_background.png");
 
     @Override
     public void register(LayeredDrawerWrapper layeredDrawerWrapper) {
@@ -35,22 +33,22 @@ public class StyleMeterHud implements HudLayerRegistrationCallback {
                 int x = position.isRight ? context.getScaledWindowWidth() + position.x : position.x;
                 int y = position.isBottom ? context.getScaledWindowHeight() + position.y : position.y;
 
-                String styleRank = effect.styleRank;
-                int styleRankColor = effect.styleColor;
+                StyleMeterEffect.StyleRank styleRank = effect.styleRank;
+                int styleRankColor = styleRank.getColor();
 
-                String prefix = effect.getPrefix();
-                String suffix = effect.getSuffix();
+                MutableText prefix = Text.translatable(styleRank.getTranslationKey(false));
+                MutableText suffix = Text.translatable(styleRank.getTranslationKey(true));
 
-                context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, x, y, 0, 0, 128, 104, 128, 104);
+                context.fill(x, y, x+128, y+104, ColorHelper.withAlpha((int) (ModConfig.styleMeterBackgroundOpacity * 255), 0x141414));
 
                 context.getMatrices().push();
                 context.getMatrices().translate(x + 3, y + 3, 0);
                 context.getMatrices().scale(2F, 2F, 1F);
-                context.drawText(textRenderer, Text.literal(prefix).formatted(Formatting.BOLD).withColor(styleRankColor), 0, 0, 0xFFFFFF, true);
+                context.drawText(textRenderer, prefix.formatted(Formatting.BOLD).withColor(styleRankColor), 0, 0, 0xFFFFFF, true);
 
-                context.getMatrices().translate(prefix.length() * 7, 2, 0);
+                context.getMatrices().translate(prefix.getString().length() * 7, 2, 0);
                 context.getMatrices().scale(0.8F, 0.8F, 0.8F);
-                context.drawText(textRenderer, Text.literal(suffix).formatted(Formatting.WHITE), 0, 0, 0xFFFFFF, true);
+                context.drawText(textRenderer, suffix.formatted(Formatting.WHITE), 0, 0, 0xFFFFFF, true);
                 context.getMatrices().pop();
 
                 drawLine(context, x + 2, y + 21, styleRankColor, EffectRegistry.STYLE_METER_EFFECT.getLineMultiplier());

@@ -1,39 +1,25 @@
 package powercyphe.ultraeffects.effect;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 import net.minecraft.util.collection.DefaultedList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import powercyphe.ultraeffects.ModConfig;
 import powercyphe.ultraeffects.registry.ModSounds;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class StyleMeterEffect extends TickingEffect {
 
-    private static final List<Pair<String, HashMap<String, Object>>> STYLE_LIST = List.of(
-        new Pair<>("none", rank(0, 0xff0000, 10F)),
-        new Pair<>("destructive", rank(200, 0x0193fb, 15F)),
-        new Pair<>("chaotic", rank(300, 0x4cff00, 18.75F)),
-        new Pair<>("brutal", rank(400, 0xfed800, 22.5F)),
-        new Pair<>("anarchic", rank(500, 0xff6a00, 30F)),
-        new Pair<>("supreme", rank(700, 0xff0000, 45F)),
-        new Pair<>("ssadistic", rank(850, 0xff0000, 60F)),
-        new Pair<>("ssshitstorm", rank(1000,0xff0000, 90F)),
-        new Pair<>("ultrakill", rank(1500, 0xffd700, 120F))
-    );
-
-    public String styleRank = STYLE_LIST.getFirst().getLeft();
-    public int styleColor = 0xFFFFFF;
-
+    public StyleRank styleRank = StyleRank.DESTRUCTIVE;
     public float style, drainPerSecond = 0;
 
-    public final int defaultThreshold = getThreshold(STYLE_LIST.get(1).getRight());
     public float threshold, nextThreshold = 0;
+    public static float styleMax = getNextThreshold(StyleRank.values()[StyleRank.values().length-1]);
 
     public DefaultedList<Pair<Text, Integer>> styleList = DefaultedList.of();
     public DefaultedList<Pair<Text, Float>> styleQueue = DefaultedList.of();
@@ -44,10 +30,11 @@ public class StyleMeterEffect extends TickingEffect {
     @Override
     public void tick() {
         if (this.style > 0) {
-            this.style = Math.clamp(this.style - (this.drainPerSecond / 20F), 0F, 3000F);
+            this.style = Math.clamp(this.style - (this.drainPerSecond / 20F), 0F, styleMax);
 
             if (this.style < this.threshold) {
                 updateStyleRank();
+                this.style = this.threshold + ((this.nextThreshold - this.threshold) * 0.7F);
             }
         }
 
@@ -60,7 +47,7 @@ public class StyleMeterEffect extends TickingEffect {
                     this.styleList.remove(6);
                 }
                 this.styleList.addFirst(new Pair<>(pair.getLeft(), 140));
-                if (ModConfig.styleMeterSound) {
+                if (this.shouldDisplay() && ModConfig.styleMeterSound) {
                     UltraEffectsUtil.playSound(ModSounds.STYLE_METER_CLICK, SoundCategory.PLAYERS, 0.25F, 1F);
                 }
             }
@@ -89,82 +76,116 @@ public class StyleMeterEffect extends TickingEffect {
     }
 
     public void updateStyleRank() {
-        List<Pair<String, HashMap<String, Object>>> ranks = List.copyOf(STYLE_LIST);
-        int currentThreshold = -1;
+        for (StyleRank rank : StyleRank.values()) {
+            float requiredStyle = getThreshold(rank);
 
-        for (Pair<String, HashMap<String, Object>> pair : ranks) {
-            String styleRank = pair.getLeft();
-            HashMap<String, Object> map = pair.getRight();
-            int index = ranks.indexOf(pair);
+            if (this.style > requiredStyle) {
+                this.styleRank = rank;
 
-            int color = getColor(map);
-            int threshold = getThreshold(map);
-            float drain = getDrainPerSecond(map);
+                this.threshold = getThreshold(rank);
+                this.nextThreshold = getNextThreshold(rank);
 
-            if (this.style >= threshold && threshold > currentThreshold) {
-                this.styleRank = styleRank;
-                this.styleColor = color;
-
-                this.threshold = threshold;
-                if (index+1 < ranks.size()) {
-                    this.nextThreshold = getThreshold(ranks.get(index+1).getRight());
-                } else if (this.nextThreshold < this.style) {
-                    this.nextThreshold = this.style;
-                }
-
-                this.drainPerSecond = drain;
-
-                currentThreshold = threshold;
+                this.drainPerSecond = rank.getDrainPerSecond();
             }
         }
 
     }
 
     public boolean shouldDisplay() {
-        if (MinecraftClient.getInstance().inGameHud.getDebugHud().shouldShowDebugHud()) {
+        if (UltraEffectsUtil.getClient().inGameHud.getDebugHud().shouldShowDebugHud()) {
             return false;
         }
         return switch (ModConfig.styleMeterDisplayCondition) {
             case ALWAYS -> true;
-            case ANY_STYLE -> this.style >= this.defaultThreshold || !this.styleList.isEmpty();
-            case POINTS_ONLY -> this.style >= this.defaultThreshold;
+            case ANY_STYLE -> this.style > 0 || !this.styleList.isEmpty();
+            case POINTS_ONLY -> this.style > 0;
             case EVENTS_ONLY -> !this.styleList.isEmpty();
             case null, default -> false;
         };
     }
 
-    public String getPrefix() {
-        return Text.translatable(("ultraeffects.style_meter." + this.styleRank + ".prefix")).getString();
-    }
-
-    public String getSuffix() {
-        return Text.translatable(("ultraeffects.style_meter." + this.styleRank + ".suffix")).getString();
-    }
-
     public float getLineMultiplier() {
-        if (this.style < this.defaultThreshold) {
+        if (this.style <= 0) {
             return 0F;
         }
         return Math.clamp((this.style - this.threshold) / (this.nextThreshold - this.threshold), 0F, 1F);
     }
 
-    private static int getThreshold(HashMap<String, Object> map) {
-        return (int) map.get("threshold");
+    private static float getThreshold(@NotNull StyleRank rank) {
+        float t = 0;
+        for (int index = 0; index < rank.getIndex(); index++) {
+            StyleRank r = StyleRank.fromIndex(index);
+            if (r != null) {
+                t += r.getThreshold();
+            }
+        }
+        return t;
     }
 
-    private static int getColor(HashMap<String, Object> map) {
-        return (int) map.get("color");
+    private static float getNextThreshold(@NotNull StyleRank rank) {
+        return getThreshold(rank) + rank.getThreshold();
     }
 
-    private static float getDrainPerSecond(HashMap<String, Object> map) {
-        return (float) map.get("drain");
-    }
+    public enum StyleRank {
+        DESTRUCTIVE(0, 0x0193fb, 200F, 15F),
+        CHAOTIC(1, 0x4cff00, 300F, 18.75F),
+        BRUTAL(2, 0xfed800, 400F, 22.5F),
+        ANARCHIC(3, 0xff6a00, 500, 30F),
+        SUPREME(4, 0xff0000, 700, 45F),
+        SSADISTIC(5, 0xff0000, 850F, 60F),
+        SSSHITSTORM(6, 0xff0000, 1000, 90F),
+        ULTRAKILL(7, 0xffd700, 1500F, 120F)
+        ;
 
-    private static HashMap<String, Object> rank(int threshold, int color, float drainPerSecond) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("threshold", threshold);
-        map.put("color", color);
-        map.put("drain", drainPerSecond);
-        return map;
+        private final String id;
+        private final int index;
+        private final int color;
+
+        private final float threshold;
+        private final float drainPerSecond;
+
+        StyleRank(int index, int color, float threshold, float drainPerSecond) {
+            this.id = this.name().toLowerCase();
+            this.index = index;
+            this.color = color;
+
+            this.threshold = threshold;
+            this.drainPerSecond = drainPerSecond;
+        }
+
+        public String getId() {
+            return this.id;
+        }
+
+        public int getIndex() {
+            return this.index;
+        }
+
+        public int getColor() {
+            return this.color;
+        }
+
+        public float getThreshold() {
+            return this.threshold;
+        }
+
+        public float getDrainPerSecond() {
+            return this.drainPerSecond;
+        }
+
+        public String getTranslationKey(boolean suffix) {
+            return "ultraeffects.style_meter." + this.getId() + (suffix ? ".suffix" : ".prefix");
+        }
+
+        @Nullable
+        public static StyleRank fromIndex(int index) {
+            for (StyleRank rank : StyleRank.values()) {
+                if (index == rank.getIndex()) {
+                    return rank;
+                }
+            }
+
+            return null;
+        }
     }
 }

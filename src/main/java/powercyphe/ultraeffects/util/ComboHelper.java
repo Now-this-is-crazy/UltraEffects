@@ -12,13 +12,13 @@ public class ComboHelper {
     public static DefaultedList<ComboInstance> COMBO_TYPES = DefaultedList.of();
 
     public static ComboInstance MELEE = register(new ComboInstance("melee", 30, 3, true, combo -> {
-        return 10 + Math.clamp((combo-2) * 5F, 0F, 40F);
+        return 10 + Math.clamp((combo-2) * 15F, 0F, 100F);
     }));
     public static ComboInstance PROJECTILE = register(new ComboInstance("projectile", 0, 1, false, combo -> {
-        return 10 + Math.clamp((combo-2) * 20F, 0F, 70F);
+        return 10 + Math.clamp((combo-2) * 20F, 0F, 100F);
     }));
     public static ComboInstance KILL = register(new ComboInstance("kill", 1, 2, false, combo -> {
-        return 10 + Math.clamp((combo-3) * 10F, 0F, 70F);
+        return 10 + Math.clamp((combo-3) * 30F, 0F, 100F);
     }));
 
     public static ComboInstance register(ComboInstance comboInstance) {

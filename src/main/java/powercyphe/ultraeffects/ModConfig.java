@@ -38,6 +38,9 @@ public class ModConfig extends MidnightConfig {
     public static StyleMeterMode styleMeterDisplayCondition = StyleMeterMode.ANY_STYLE;
     @Entry(category = "styleMeter")
     public static StyleMeterPosition styleMeterPosition = StyleMeterPosition.TOP_RIGHT;
+
+    @Entry(category = "styleMeter", min = 0, max = 1, isSlider = true)
+    public static float styleMeterBackgroundOpacity = 0.7F;
     @Entry(category = "styleMeter")
     public static boolean styleMeterSound = true;
 
