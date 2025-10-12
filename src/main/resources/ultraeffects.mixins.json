@@ -16,7 +16,7 @@
     "hotbar_hud.InGameHudMixin",
     "hotbar_hud.transparency.DrawContextMixin",
     "hotbar_hud.transparency.GuiRendererMixin",
-    "hotbar_hud.transparency.ItemRenderStateMixin",
+    "hotbar_hud.transparency.KeyedItemRenderStateMixin",
     "hotbar_hud.transparency.TexturedQuadGuiElementRenderStateMixin",
     "style_meter.ClientPlayerInteractionManagerMixin",
     "style_meter.ClientPlayNetworkHandlerMixin",

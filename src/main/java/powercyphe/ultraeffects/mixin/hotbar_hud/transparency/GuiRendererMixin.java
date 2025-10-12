@@ -14,22 +14,14 @@ import powercyphe.ultraeffects.util.AlphaOverrideAddon;
 public class GuiRendererMixin {
 
     @ModifyArgs(method = "prepareItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/render/state/TexturedQuadGuiElementRenderState;<init>(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/client/texture/TextureSetup;Lorg/joml/Matrix3x2f;IIIIFFFFILnet/minecraft/client/gui/ScreenRect;Lnet/minecraft/client/gui/ScreenRect;)V"))
-    private void ultraeffects$alphaOverridePipeline(Args args, ItemGuiElementRenderState state, float u, float v, int pixelsPerItem, int itemAtlasSideLength) {
-        AlphaOverrideAddon alphaOverride = (AlphaOverrideAddon) (state.state());
-
-        if (alphaOverride.ultraeffects$getAlphaOverride() != null) {
-            args.set(0, RenderPipelines.GUI_TEXTURED);
-        }
-    }
-
-    @ModifyArgs(method = "prepareItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/render/state/TexturedQuadGuiElementRenderState;<init>(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/client/texture/TextureSetup;Lorg/joml/Matrix3x2f;IIIIFFFFILnet/minecraft/client/gui/ScreenRect;Lnet/minecraft/client/gui/ScreenRect;)V"))
     private void ultraeffects$alphaOverride(Args args, ItemGuiElementRenderState state, float u, float v, int pixelsPerItem, int itemAtlasSideLength) {
         AlphaOverrideAddon alphaOverride = (AlphaOverrideAddon) (state.state());
 
         if (alphaOverride.ultraeffects$getAlphaOverride() != null) {
+            args.set(0, RenderPipelines.GUI_TEXTURED);
+
             int color = args.get(11);
             args.set(11, ColorHelper.withAlpha((int) (ColorHelper.getAlpha(color) * alphaOverride.ultraeffects$getAlphaOverride()), color));
         }
-
     }
 }

@@ -1,7 +1,7 @@
 package powercyphe.ultraeffects.mixin.hotbar_hud.transparency;
 
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.item.ItemRenderState;
+import net.minecraft.client.render.item.KeyedItemRenderState;
 import net.minecraft.util.math.ColorHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,13 +18,13 @@ public class DrawContextMixin implements AlphaOverrideAddon {
 
     // Item
     @ModifyArg(method = "drawItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;III)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/item/ItemModelManager;clearAndUpdate(Lnet/minecraft/client/render/item/ItemRenderState;Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemDisplayContext;Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;I)V"),
-    index = 0)
-    private ItemRenderState ultraeffects$alphaOverrideItem(ItemRenderState original) {
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/render/state/ItemGuiElementRenderState;<init>(Ljava/lang/String;Lorg/joml/Matrix3x2f;Lnet/minecraft/client/render/item/KeyedItemRenderState;IILnet/minecraft/client/gui/ScreenRect;)V"),
+    index = 2)
+    private KeyedItemRenderState ultraeffects$alphaOverrideItem(KeyedItemRenderState state) {
         if (this.alphaOverride != null) {
-            ((AlphaOverrideAddon) original).ultraeffects$setAlphaOverride(this.alphaOverride);
+            ((AlphaOverrideAddon) state).ultraeffects$setAlphaOverride(this.alphaOverride);
         }
-        return original;
+        return state;
     }
 
     // Text

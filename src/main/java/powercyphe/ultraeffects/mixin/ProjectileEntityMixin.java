@@ -1,9 +1,6 @@
 package powercyphe.ultraeffects.mixin;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Ownable;
-import net.minecraft.entity.ProjectileDeflection;
+import net.minecraft.entity.*;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3d;
@@ -39,13 +36,13 @@ public abstract class ProjectileEntityMixin extends Entity implements Ownable, D
     @Inject(method = "tick", at = @At("TAIL"))
     private void ultraeffects$storeDistanceClient(CallbackInfo ci) {
         ProjectileEntity entity = (ProjectileEntity) (Object) this;
-        if (entity.getWorld().isClient()) {
-            this.distanceTravelledClient += (float) entity.getPos().distanceTo(new Vec3d(entity.lastX, entity.lastY, entity.lastZ));
+        if (entity.getEntityWorld().isClient()) {
+            this.distanceTravelledClient += (float) entity.getEntityPos().distanceTo(new Vec3d(entity.lastX, entity.lastY, entity.lastZ));
         }
     }
 
     @Inject(method = "deflect", at = @At("HEAD"))
-    private void ultraeffects$parry(ProjectileDeflection deflection, Entity deflector, Entity owner, boolean fromAttack, CallbackInfoReturnable<Boolean> cir) {
+    private void ultraeffects$parry(ProjectileDeflection deflection, Entity deflector, LazyEntityReference<Entity> lazyEntityReference, boolean fromAttack, CallbackInfoReturnable<Boolean> cir) {
         if (UltraEffectsUtil.isClientPlayer(deflector) && fromAttack && deflection == ProjectileDeflection.REDIRECTED) {
             if ((this.parryCooldown + 5) < this.age) {
                 this.parryCooldown = this.age;
