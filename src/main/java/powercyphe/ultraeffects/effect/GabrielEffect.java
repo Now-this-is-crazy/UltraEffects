@@ -39,11 +39,11 @@ public class GabrielEffect extends OverlayEffect {
                     float threshold = 0;
                     switch (ModConfig.gabrielThresholdMode) {
                         case HEALTH_PERCENTAGE -> threshold = (player.getMaxHealth() * ((float) ModConfig.gabrielThreshold / 100));
-                        case REMAINING_HEALTH -> threshold = ModConfig.gabrielThreshold;
+                        case null, default -> threshold = ModConfig.gabrielThreshold;
                     }
 
                     if (!player.isDead() && player.getHealth() <= threshold) {
-                        UltraEffectsUtil.playSound(ModSounds.GABRIEL, SoundCategory.PLAYERS, 0.5F, 1F);
+                        UltraEffectsUtil.playSound(ModSounds.GABRIEL, SoundCategory.PLAYERS, 1F, 0.5F);
                         display();
                     }
                 }

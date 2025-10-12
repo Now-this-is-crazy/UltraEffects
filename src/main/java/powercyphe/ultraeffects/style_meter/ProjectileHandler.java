@@ -9,6 +9,7 @@ import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.util.math.MathHelper;
 import powercyphe.ultraeffects.util.ComboHelper;
 import powercyphe.ultraeffects.util.HitEntities;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
@@ -36,7 +37,7 @@ public class ProjectileHandler {
                 if (distanceTravelled > 30) {
                     type = "far";
                     points = 100;
-                } else if (arrowEntity.getVelocity().length() < 1.6 / Math.clamp(distanceTravelled / 10, 1, 4)) {
+                } else if (arrowEntity.getVelocity().length() < 1.6 / MathHelper.clamp(distanceTravelled / 10, 1, 4)) {
                     type = "slow";
                     points = 20;
                 }

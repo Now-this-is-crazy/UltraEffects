@@ -1,5 +1,5 @@
 {
-  "ultraeffects.midnightconfig.title": "Ultra Effects",
+  "ultraeffects.midnightconfig.title": "UltraEffects",
 
   "ultraeffects.midnightconfig.category.parry": "Parries & Mace Hits",
 
@@ -17,25 +17,119 @@
   "ultraeffects.midnightconfig.parryImages.tooltip": "The images that should be used for flashes. §cMust §rbe §a.png §rfiles and put under §aultraeffects/assets/textures/misc/§r.",
 
 
+  "ultraeffects.midnightconfig.category.hotbarHud": "Hotbar & Cursor Hud",
+
+  "ultraeffects.midnightconfig.hotbarHudEnabled": "Hotbar & Health Hud",
+  "ultraeffects.midnightconfig.hotbarHudEnabled.tooltip": "Whether or not the Hotbar & Health Hud should be replaced by an Ultrakill-Style one.",
+
+  "ultraeffects.midnightconfig.hotbarHudCursor": "Cursor Hud",
+  "ultraeffects.midnightconfig.hotbarHudCursor.tooltip": "Whether or not there should be an additional Cursor Hud to show Health & Hunger.",
+
+  "ultraeffects.midnightconfig.hotbarHudSide": "Hud Side",
+  "ultraeffects.midnightconfig.hotbarHudSide.tooltip": "Changes where the Hud is displayed.",
+
+  "ultraeffects.midnightconfig.hotbarHudItemNameDisplay": "Held Item Name Display Condition",
+  "ultraeffects.midnightconfig.hotbarHudItemNameDisplay.tooltip": "Modifies how the name of the held item is displayed.",
+
+  "ultraeffects.midnightconfig.hotbarHudHealthNumberDisplay": "Health Number Display",
+  "ultraeffects.midnightconfig.hotbarHudHealthNumberDisplay.tooltip": "The way the Health Number is displayed on the Health Bar.",
+
+  "ultraeffects.midnightconfig.hotbarHudChatFocusModification": "Hud Chat Modification",
+  "ultraeffects.midnightconfig.hotbarHudChatFocusModification.tooltip": "Changes how the chat is displayed if the Hotbar Hud changes are enabled. \nThis config option only affects you if you have the Hud Side set to Left.",
+
+  "ultraeffects.midnightconfig.hotbarHudColors": "Hud Colors",
+  "ultraeffects.midnightconfig.hotbarHudColors.tooltip": "Changes the color-scheme of the Hud.",
+
+  "ultraeffects.midnightconfig.hotbarHudNutritionOverlay": "Hud Nutrition Overlay",
+  "ultraeffects.midnightconfig.hotbarHudNutritionOverlay.tooltip": "Modifies whether or not gained nutrition and health from the held item should be displayed.",
+
+  "ultraeffects.midnightconfig.hotbarHudBackground": "Hud Background",
+  "ultraeffects.midnightconfig.hotbarHudBackgroundOpacity": "Background Opacity",
+
+  "ultraeffects.midnightconfig.hotbarHudBackgroundColor": "Background Color",
+  "ultraeffects.midnightconfig.hotbarHudBackgroundColorRed": "§cRed",
+  "ultraeffects.midnightconfig.hotbarHudBackgroundColorGreen": "§aGreen",
+  "ultraeffects.midnightconfig.hotbarHudBackgroundColorBlue": "§bBlue",
+
+  "ultraeffects.midnightconfig.hotbarHudHealthColor": "Health Color",
+  "ultraeffects.midnightconfig.hotbarHudHealthColorRed": "§cRed",
+  "ultraeffects.midnightconfig.hotbarHudHealthColorGreen": "§aGreen",
+  "ultraeffects.midnightconfig.hotbarHudHealthColorBlue": "§bBlue",
+
+  "ultraeffects.midnightconfig.hotbarHudAbsorptionColor": "Absorption Color",
+  "ultraeffects.midnightconfig.hotbarHudAbsorptionColorRed": "§cRed",
+  "ultraeffects.midnightconfig.hotbarHudAbsorptionColorGreen": "§aGreen",
+  "ultraeffects.midnightconfig.hotbarHudAbsorptionColorBlue": "§bBlue",
+
+  "ultraeffects.midnightconfig.hotbarHudArmorColor": "Armor Color",
+  "ultraeffects.midnightconfig.hotbarHudArmorColorRed": "§cRed",
+  "ultraeffects.midnightconfig.hotbarHudArmorColorGreen": "§aGreen",
+  "ultraeffects.midnightconfig.hotbarHudArmorColorBlue": "§bBlue",
+
+  "ultraeffects.midnightconfig.hotbarHudAirColor": "Air Color",
+  "ultraeffects.midnightconfig.hotbarHudAirColorRed": "§cRed",
+  "ultraeffects.midnightconfig.hotbarHudAirColorGreen": "§aGreen",
+  "ultraeffects.midnightconfig.hotbarHudAirColorBlue": "§bBlue",
+
+  "ultraeffects.midnightconfig.hotbarHudHungerColor": "Hunger Color",
+  "ultraeffects.midnightconfig.hotbarHudHungerColorRed": "§cRed",
+  "ultraeffects.midnightconfig.hotbarHudHungerColorGreen": "§aGreen",
+  "ultraeffects.midnightconfig.hotbarHudHungerColorBlue": "§bBlue",
+
+  "ultraeffects.midnightconfig.hotbarHudExperienceColor": "Experience Color",
+  "ultraeffects.midnightconfig.hotbarHudExperienceColorRed": "§cRed",
+  "ultraeffects.midnightconfig.hotbarHudExperienceColorGreen": "§aGreen",
+  "ultraeffects.midnightconfig.hotbarHudExperienceColorBlue": "§bBlue",
+
+  "ultraeffects.midnightconfig.enum.HotbarHudSide.MAIN_ARM": "Main Arm",
+  "ultraeffects.midnightconfig.enum.HotbarHudSide.LEFT": "Left",
+  "ultraeffects.midnightconfig.enum.HotbarHudSide.RIGHT": "Right",
+
+  "ultraeffects.midnightconfig.enum.HotbarHudItemNameDisplay.ALWAYS": "Always",
+  "ultraeffects.midnightconfig.enum.HotbarHudItemNameDisplay.VANILLA": "Vanilla",
+  "ultraeffects.midnightconfig.enum.HotbarHudItemNameDisplay.NEVER": "Never",
+
+  "ultraeffects.midnightconfig.enum.HotbarHudHealthNumberDisplay.ULTRAKILL": "Ultrakill",
+  "ultraeffects.midnightconfig.enum.HotbarHudHealthNumberDisplay.VANILLA": "Vanilla",
+  "ultraeffects.midnightconfig.enum.HotbarHudHealthNumberDisplay.NEVER": "Never",
+
+  "ultraeffects.midnightconfig.enum.HotbarHudChatFocusModification.SHIFTED_CHAT": "Shifted Chat",
+  "ultraeffects.midnightconfig.enum.HotbarHudChatFocusModification.TRANSPARENT_HUD": "Transparent Hud",
+  "ultraeffects.midnightconfig.enum.HotbarHudChatFocusModification.HIDDEN_HUD": "Hidden Hud",
+
+  "ultraeffects.midnightconfig.enum.HotbarHudColors.ULTRAKILL": "Ultrakill",
+  "ultraeffects.midnightconfig.enum.HotbarHudColors.VANILLA": "Vanilla",
+  "ultraeffects.midnightconfig.enum.HotbarHudColors.CUSTOM": "Custom",
+
+  "ultraeffects.midnightconfig.enum.HotbarHudNutritionOverlay.ENABLED": "Enabled",
+  "ultraeffects.midnightconfig.enum.HotbarHudItemNameDisplay.DISABLED": "Disabled",
+  "ultraeffects.midnightconfig.enum.HotbarHudItemNameDisplay.WITH_APPLESKIN": "With Appleskin installed",
+
+
   "ultraeffects.midnightconfig.category.styleMeter": "Style Meter",
 
   "ultraeffects.midnightconfig.styleMeterDisplayCondition": "Display Condition",
   "ultraeffects.midnightconfig.styleMeterDisplayCondition.tooltip": "The Condition whether or not the Style Meter should be displayed on Screen.",
   "ultraeffects.midnightconfig.styleMeterPosition": "Display Position",
   "ultraeffects.midnightconfig.styleMeterPosition.tooltip": "Where the Style Meter should be displayed.",
+
+  "ultraeffects.midnightconfig.styleMeterBackground": "Style Meter Background",
   "ultraeffects.midnightconfig.styleMeterBackgroundOpacity": "Background Opacity",
-  "ultraeffects.midnightconfig.styleMeterBackgroundOpacity.tooltip": "Background Opacity of the Style Meter.",
+  "ultraeffects.midnightconfig.styleMeterBackgroundColor": "Background Color",
+  "ultraeffects.midnightconfig.styleMeterBackgroundColorRed": "§cRed",
+  "ultraeffects.midnightconfig.styleMeterBackgroundColorGreen": "§aGreen",
+  "ultraeffects.midnightconfig.styleMeterBackgroundColorBlue": "§bBlue",
+
   "ultraeffects.midnightconfig.styleMeterSound": "Display Sound",
   "ultraeffects.midnightconfig.styleMeterSound.tooltip": "Whether or not a sound should be played during a style event.",
-
   "ultraeffects.midnightconfig.styleMeterHideScoreboard": "Hide Scoreboard",
   "ultraeffects.midnightconfig.styleMeterHideScoreboard.tooltip": "Whether or not the Style Meter should hide the scoreboard when active.",
 
-  "ultraeffects.midnightconfig.enum.StyleMeterMode.ALWAYS": "Always",
-  "ultraeffects.midnightconfig.enum.StyleMeterMode.ANY_STYLE": "Any Style",
-  "ultraeffects.midnightconfig.enum.StyleMeterMode.POINTS_ONLY": "Points Only",
-  "ultraeffects.midnightconfig.enum.StyleMeterMode.EVENTS_ONLY": "Events Only",
-  "ultraeffects.midnightconfig.enum.StyleMeterMode.NEVER": "Never",
+  "ultraeffects.midnightconfig.enum.StyleMeterDisplayCondition.ALWAYS": "Always",
+  "ultraeffects.midnightconfig.enum.StyleMeterDisplayCondition.ANY_STYLE": "Any Style",
+  "ultraeffects.midnightconfig.enum.StyleMeterDisplayCondition.POINTS_ONLY": "Points Only",
+  "ultraeffects.midnightconfig.enum.StyleMeterDisplayCondition.EVENTS_ONLY": "Events Only",
+  "ultraeffects.midnightconfig.enum.StyleMeterDisplayCondition.NEVER": "Never",
 
   "ultraeffects.midnightconfig.enum.StyleMeterPosition.TOP_LEFT": "Top Left",
   "ultraeffects.midnightconfig.enum.StyleMeterPosition.BOTTOM_LEFT": "Bottom Left",
@@ -43,7 +137,10 @@
   "ultraeffects.midnightconfig.enum.StyleMeterPosition.BOTTOM_RIGHT": "Bottom Right",
 
 
-  "ultraeffects.midnightconfig.category.misc": "Eternal Gabriel & Misc",
+  "ultraeffects.midnightconfig.category.misc": "Misc Options",
+
+  "ultraeffects.midnightconfig.deathScreenOverhaul": "Death Screen Overhaul",
+  "ultraeffects.midnightconfig.deathScreenOverhaul.tooltip": "Changes the Death Sequence to be like the Ultrakill one.",
 
   "ultraeffects.midnightconfig.gabrielImages": "Gabriel Images",
   "ultraeffects.midnightconfig.gabrielImages.tooltip": "The images that should be used as overlays. §cMust §rbe §a.png §rfiles and put under §aultraeffects/assets/textures/misc/§r.",
@@ -95,6 +192,46 @@
   "ultraeffects.style_meter.style.bow_hit": "Arrow Shot",
   "ultraeffects.style_meter.style.bow_hit_slow": "Slowpoke",
   "ultraeffects.style_meter.style.bow_hit_far": "Sniped",
+
+  "ultraeffects.death_sequence.line1": "<orange>WARNING: EXTREME DAMAGE SUSTAINED.",
+  "ultraeffects.death_sequence.line2": "<orange>RUNNING DIAGNOSTIC",
+  "ultraeffects.death_sequence.line3": "<red>ERROR: ARM CORE MODULE #1 NOT RESPONDING",
+  "ultraeffects.death_sequence.line4": "<red>ERROR: ARM CORE MODULE #2 NOT RESPONDING",
+  "ultraeffects.death_sequence.line5": "<orange>WARNING: COMBAT SYSTEMS INOPERABLE",
+  "ultraeffects.death_sequence.line6": "<orange>ATTEMPTING RECONSTRUCTION",
+  "ultraeffects.death_sequence.line7": "<red>ERROR: SELF-REPAIR NEXUS NOT RESPONDING",
+  "ultraeffects.death_sequence.line8": "<red>INSUFFICIENT BLOOD.",
+  "ultraeffects.death_sequence.line9": "<red>INSUFFICIENT BLOOD.",
+  "ultraeffects.death_sequence.line10": "<orange>INITIATING ESCAPE PROTOCOL",
+  "ultraeffects.death_sequence.line11": "<orange>ATTEMPTING CONNECTION WITH LIMBIC MODULES",
+  "ultraeffects.death_sequence.line12": "<red>ERROR: LEG CORE MODULE #1 NOT RESPONDING",
+  "ultraeffects.death_sequence.line13": "<red>ERROR: LEG CORE MODULE #2 NOT RESPONDING",
+  "ultraeffects.death_sequence.line14": "<orange>WARNING: UNABLE TO SUSTAIN MOTOR FUNCTIONS",
+  "ultraeffects.death_sequence.line15": "<red>ERROR: VISUAL CORTEX MALFUNCTION",
+  "ultraeffects.death_sequence.line16": "<red>ERROR: LIMBIC FUNCTION NOT RESPONDING",
+  "ultraeffects.death_sequence.line17": "<red>INSUFFICIENT BLOOD.",
+  "ultraeffects.death_sequence.line18": "<red>INSUFFICIENT BLOOD.",
+  "ultraeffects.death_sequence.line19": "<orange>WARNING: UNABLE TO SUSTAIN INTERNAL ORGANS",
+  "ultraeffects.death_sequence.line20": "<red>! PULSE FAILURE !",
+  "ultraeffects.death_sequence.line21": "<red>! PULSE FAILURE !",
+  "ultraeffects.death_sequence.line22": "<red>! PULSE FAILURE !",
+  "ultraeffects.death_sequence.line23": "<red>-!- SHUTDOWN IMMINENT -!-",
+  "ultraeffects.death_sequence.line24": "<red>ERROR: NO VOCAL INTERFACE DETECTED, UNABLE TO COMPLETE TASK",
+  "ultraeffects.death_sequence.line25": "<red>! PULSE FAILURE !",
+  "ultraeffects.death_sequence.line26": "<red>! PULSE FAILURE !",
+  "ultraeffects.death_sequence.line27": "<red>INSUFFICIENT BLOOD.",
+  "ultraeffects.death_sequence.line28": "<red>INSUFFICIENT BLOOD.",
+  "ultraeffects.death_sequence.line29": "<orange>WARNING: UNABLE TO SUSTAIN BASIC FUNCTIONS",
+  "ultraeffects.death_sequence.line30": "<red>-!- SHUTDOWN IMMINENT -!-",
+  "ultraeffects.death_sequence.line31": "<red>-!- SHUTDOWN IMMINENT -!-",
+  "ultraeffects.death_sequence.line32": "<red>I DON'T WANT TO DIE.",
+  "ultraeffects.death_sequence.line33": "<red>I DON'T WANT TO DIE.",
+  "ultraeffects.death_sequence.line34": "<red>I DON'T WANT TO DIE.",
+  "ultraeffects.death_sequence.line35": "<red>I DON'T WANT TO DIE.",
+  "ultraeffects.death_sequence.line36": "<red>I DON'T WANT TO DIE.",
+  "ultraeffects.death_sequence.line37": "<red>I DON'T WANT TO DIE.",
+
+  "ultraeffects.death_sequence.text": "[YOU ARE DEAD]",
 
   "subtitles.ultraeffects.generic_clang": "Something clangs",
   "subtitles.ultraeffects.gabriel": "MACHINE!"

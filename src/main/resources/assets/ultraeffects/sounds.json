@@ -17,6 +17,21 @@
       "ultraeffects:gabriel"
     ]
   },
+  "death_sequence": {
+    "sounds": [
+      "ultraeffects:death_sequence"
+    ]
+  },
+  "death_sequence_end": {
+    "sounds": [
+      "ultraeffects:death_sequence_end"
+    ]
+  },
+  "death_skull": {
+    "sounds": [
+      "ultraeffects:death_skull"
+    ]
+  },
   "style_meter_click": {
     "sounds": [
       {

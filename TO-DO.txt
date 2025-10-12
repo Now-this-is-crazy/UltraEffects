@@ -1,7 +1,12 @@
 STYLE METER
 - headshots
-- style meter position
 - pet kills
+- chargeback for deflecting projectiles w/ projectiles
+- multiplier for being mid-air
+
+HOTBAR HUD
+- hotbar item interpolation
+- armor & breath meter(?)
 
 ENCHANCEMENT COMPAT
 - disarm
@@ -9,3 +14,9 @@ ENCHANCEMENT COMPAT
 - bury
 - meteor
 - apex crit
+
+OTHER
+- ultrakill-style explosions
+- ultrakill-style bossbars
+- blood and gore
+- projectile hit particles

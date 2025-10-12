@@ -36,7 +36,6 @@ public abstract class ProjectileEntityMixin extends Entity implements Ownable, D
         super(type, world);
     }
 
-
     @Inject(method = "tick", at = @At("TAIL"))
     private void ultraeffects$storeDistanceClient(CallbackInfo ci) {
         ProjectileEntity entity = (ProjectileEntity) (Object) this;

@@ -1,9 +1,11 @@
 package powercyphe.ultraeffects.effect;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import powercyphe.ultraeffects.ModConfig;
@@ -30,7 +32,7 @@ public class StyleMeterEffect extends TickingEffect {
     @Override
     public void tick() {
         if (this.style > 0) {
-            this.style = Math.clamp(this.style - (this.drainPerSecond / 20F), 0F, styleMax);
+            this.style = MathHelper.clamp(this.style - (this.drainPerSecond / 20F), 0F, styleMax);
 
             if (this.style < this.threshold) {
                 updateStyleRank();
@@ -48,7 +50,7 @@ public class StyleMeterEffect extends TickingEffect {
                 }
                 this.styleList.addFirst(new Pair<>(pair.getLeft(), 140));
                 if (this.shouldDisplay() && ModConfig.styleMeterSound) {
-                    UltraEffectsUtil.playSound(ModSounds.STYLE_METER_CLICK, SoundCategory.PLAYERS, 0.25F, 1F);
+                    UltraEffectsUtil.playSound(ModSounds.STYLE_METER_CLICK, SoundCategory.PLAYERS, 1F, 0.25F);
                 }
             }
             updateStyleRank();
@@ -92,7 +94,7 @@ public class StyleMeterEffect extends TickingEffect {
     }
 
     public boolean shouldDisplay() {
-        if (UltraEffectsUtil.getClient().inGameHud.getDebugHud().shouldShowDebugHud()) {
+        if (MinecraftClient.getInstance().inGameHud.getDebugHud().shouldShowDebugHud()) {
             return false;
         }
         return switch (ModConfig.styleMeterDisplayCondition) {
@@ -108,7 +110,7 @@ public class StyleMeterEffect extends TickingEffect {
         if (this.style <= 0) {
             return 0F;
         }
-        return Math.clamp((this.style - this.threshold) / (this.nextThreshold - this.threshold), 0F, 1F);
+        return MathHelper.clamp((this.style - this.threshold) / (this.nextThreshold - this.threshold), 0F, 1F);
     }
 
     private static float getThreshold(@NotNull StyleRank rank) {
