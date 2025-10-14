@@ -69,6 +69,24 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
 
     public void updateRenderState(MinecraftClient client) {
         ClientPlayerEntity clientPlayer = UltraEffectsUtil.getClientPlayer();
+        if (ModConfig.hotbarHudEnabled || ModConfig.hotbarHudCursor) {
+            float extraHealth = 0F;
+            float extraHunger = 0F;
+
+            // Appleskin Compat
+            if (UltraEffectsClient.HAS_APPLEKSKIN && clientPlayer != null) {
+                FoodHelper.QueriedFoodResult result = HUDOverlayHandler.INSTANCE.heldFood.result(this.hotbarHudState.overlayTick, clientPlayer);
+                if (result != null) {
+                    extraHealth = FoodHelper.getEstimatedHealthIncrement(clientPlayer, new ConsumableFood(result.modifiedFoodComponent, result.consumableComponent));
+                    extraHunger = result.modifiedFoodComponent.nutrition();
+                }
+            }
+
+            // Hunger, Absorption & Hunger Bar
+            this.hotbarHudState.healthBar = new HotbarHudBarRenderState(BarType.HEALTH, UltraEffectsClient.HAS_APPLEKSKIN, this.hotbarHudState.overlayTick, extraHealth, 118, 8, 0, 0);
+            this.hotbarHudState.absorptionBar = new HotbarHudBarRenderState(BarType.ABSORPTION, (int) (118 * this.hotbarHudState.healthBar.getProgress(1)), 8, 0, 0);
+            this.hotbarHudState.staminaBar = new HotbarHudBarRenderState(BarType.HUNGER, UltraEffectsClient.HAS_APPLEKSKIN, this.hotbarHudState.overlayTick, extraHunger, 118, 8, 2, 2);
+        }
 
         // Hotbar Hud
         if (ModConfig.hotbarHudEnabled) {
@@ -82,46 +100,28 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
             this.hotbarHudState.heldItemTooltipFade = ((InGameHudAccessor) client.inGameHud).ultraeffects$getHeldItemToolTipFade();
             this.hotbarHudState.chatFocused = client.inGameHud.getChatHud().isChatFocused();
 
-            float extraHealth = 0F;
-            float extraHunger = 0F;
-
             if (clientPlayer != null) {
                 this.hotbarHudState.playerInventory = clientPlayer.getInventory();
                 this.hotbarHudState.offHandStack = clientPlayer.getOffHandStack();
 
-                // Appleskin Compat
-                if (UltraEffectsClient.HAS_APPLEKSKIN) {
-                    FoodHelper.QueriedFoodResult result = HUDOverlayHandler.INSTANCE.heldFood.result(this.hotbarHudState.overlayTick, clientPlayer);
-                    if (result != null) {
-                        extraHealth = FoodHelper.getEstimatedHealthIncrement(clientPlayer, new ConsumableFood(result.modifiedFoodComponent, result.consumableComponent));
-                        extraHunger = result.modifiedFoodComponent.nutrition();
-                    }
-                }
-
                 // Experience Bar
                 this.hotbarHudState.experienceBar = clientPlayer.isCreative() ? Optional.empty() : Optional.of(new HotbarHudBarRenderState(BarType.EXPERIENCE, 118, 9, 15, 1));
             }
-
-            // Hunger, Absorption & Hunger Bar
-            this.hotbarHudState.healthBar = new HotbarHudBarRenderState(BarType.HEALTH, UltraEffectsClient.HAS_APPLEKSKIN, this.hotbarHudState.overlayTick, extraHealth, 118, 8, 0, 0);
-            this.hotbarHudState.absorptionBar = new HotbarHudBarRenderState(BarType.ABSORPTION, (int) (118 * this.hotbarHudState.healthBar.getProgress(1)), 8, 0, 0);
-            this.hotbarHudState.staminaBar = new HotbarHudBarRenderState(BarType.HUNGER, UltraEffectsClient.HAS_APPLEKSKIN, this.hotbarHudState.overlayTick, extraHunger, 118, 8, 2, 2);
         }
-
 
         // Cursor Hud
         if (ModConfig.hotbarHudCursor) {
             float healthFade = this.hotbarHudState.cursorRenderState.healthFade();
             if (this.hotbarHudState.healthBar.smoothedPrevious() != this.hotbarHudState.healthBar.smoothedCurrent()
                     || this.hotbarHudState.absorptionBar.smoothedPrevious() != this.hotbarHudState.absorptionBar.smoothedCurrent()) {
-                healthFade = 10;
+                healthFade = 20;
             } else {
                 healthFade *= 0.57F;
             }
 
             float staminaFade = this.hotbarHudState.cursorRenderState.staminaFade();
             if (this.hotbarHudState.staminaBar.smoothedPrevious() != this.hotbarHudState.staminaBar.smoothedCurrent()) {
-                staminaFade = 10;
+                staminaFade = 20;
             } else {
                 staminaFade *= 0.57F;
             }
