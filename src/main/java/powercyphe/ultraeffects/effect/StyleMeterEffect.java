@@ -94,7 +94,7 @@ public class StyleMeterEffect extends TickingEffect {
     }
 
     public boolean shouldDisplay() {
-        if (MinecraftClient.getInstance().inGameHud.getDebugHud().shouldShowDebugHud()) {
+        if (MinecraftClient.getInstance().debugHudEntryList.isF3Enabled()) {
             return false;
         }
         return switch (ModConfig.styleMeterDisplayCondition) {

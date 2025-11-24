@@ -6,7 +6,11 @@ STYLE METER
 
 HOTBAR HUD
 - hotbar item interpolation
-- armor & breath meter(?)
+- hotbar
+- saturation, armor & breath meter
+    > saturation => override stamina bar
+    > armor => add a toggle to show the base hotbar/change the hotbar items in the hud to a shield for armor
+    > breath meter => bottom center?
 
 ENCHANCEMENT COMPAT
 - disarm
