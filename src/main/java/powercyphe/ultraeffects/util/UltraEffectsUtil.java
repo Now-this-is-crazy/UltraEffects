@@ -1,19 +1,19 @@
 package powercyphe.ultraeffects.util;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.DeathScreen;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.ColorHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.DeathScreen;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Math;
 import powercyphe.ultraeffects.ModConfig;
 import powercyphe.ultraeffects.UltraEffectsClient;
@@ -25,9 +25,9 @@ import java.util.List;
 
 public class UltraEffectsUtil {
 
-    public static void renderHorizontalColoredBar(DrawContext context, int x, int y, float progress, int fullWidth, int height, int color, int cuts, int cutWidth) {
+    public static void renderHorizontalColoredBar(GuiGraphics context, int x, int y, float progress, int fullWidth, int height, int color, int cuts, int cutWidth) {
         if (progress > 0) {
-            DefaultedList<Integer> cutPositions = DefaultedList.of();
+            NonNullList<Integer> cutPositions = NonNullList.create();
             if (cuts > 0 && cuts * cutWidth * 2 <= fullWidth) {
                 float spacing = (float) fullWidth / (cuts + 1);
                 for (int i1 = 1; i1 <= cuts; i1++) {
@@ -61,7 +61,7 @@ public class UltraEffectsUtil {
         }
     }
 
-    public static void renderRoundBox(DrawContext context, int x1, int y1, int x2, int y2, int color) {
+    public static void renderRoundBox(GuiGraphics context, int x1, int y1, int x2, int y2, int color) {
         if (Math.abs(x2-x1) < 3 || Math.abs(y2-y1) < 3) {
             context.fill(x1, y1, x2, y2, color);
         } else {
@@ -81,12 +81,12 @@ public class UltraEffectsUtil {
         }
     }
 
-    public static void renderCircleBar(DrawContext context, int x, int y, float progress, int startAngle, int angleLength, int cuts, int cutWidth, int color) {
+    public static void renderCircleBar(GuiGraphics context, int x, int y, float progress, int startAngle, int angleLength, int cuts, int cutWidth, int color) {
         if (progress > 0) {
-            Vec3d vec = new Vec3d(0, 6, 0);
-            vec = vec.rotateZ(Math.toRadians(-startAngle));
+            Vec3 vec = new Vec3(0, 6, 0);
+            vec = vec.zRot(Math.toRadians(-startAngle));
 
-            DefaultedList<Integer> cutAngles = DefaultedList.of();
+            NonNullList<Integer> cutAngles = NonNullList.create();
             if (cuts > 0 && cuts * cutWidth <= Math.abs(angleLength)) {
                 float spacing = (float) Math.abs(angleLength) / (cuts + 1);
                 for (int i = 1; i <= cuts; i++) {
@@ -103,49 +103,49 @@ public class UltraEffectsUtil {
 
             for (int i = 0; i <= steps; i++) {
                 if (!cutAngles.contains(i)) {
-                    float circleX = (float) vec.getX();
-                    float circleY = (float) vec.getY();
+                    float circleX = (float) vec.x();
+                    float circleY = (float) vec.y();
 
-                    context.getMatrices().pushMatrix();
-                    context.getMatrices().translate(x + circleX - 0.5F, y + circleY - 0.5F);
-                    context.getMatrices().scale(1 / 5F);
+                    context.pose().pushMatrix();
+                    context.pose().translate(x + circleX - 0.5F, y + circleY - 0.5F);
+                    context.pose().scale(1 / 5F);
 
                     context.fill(0, 0, (int) circleX + (circleX >= 0 ? 1 : -1), (int) circleY + (circleY >= 0 ? 1 : -1), color);
 
-                    context.getMatrices().popMatrix();
+                    context.pose().popMatrix();
                 }
 
-                vec = vec.rotateZ(Math.toRadians(direction));
+                vec = vec.zRot(Math.toRadians(direction));
             }
         }
     }
 
     public static void addStyle(String id, float points) {
-        EffectRegistry.STYLE_METER_EFFECT.addStyle(Text.translatable("ultraeffects.style_meter.style." + id), points);
+        EffectRegistry.STYLE_METER_EFFECT.addStyle(Component.translatable("ultraeffects.style_meter.style." + id), points);
     }
 
-    public static void addStyle(Text text, float points) {
+    public static void addStyle(Component text, float points) {
         EffectRegistry.STYLE_METER_EFFECT.addStyle(text, points);
     }
 
     public static List<Identifier> stringToIdentifierList(List<String> list) {
-        DefaultedList<Identifier> available = DefaultedList.of();
+        NonNullList<Identifier> available = NonNullList.create();
         for (String str : list) {
             available.add(UltraEffectsClient.id(OverlayEffect.OVERLAY_PATH + str + ".png"));
         }
         return available;
     }
 
-    public static void renderOverlay(DrawContext ctx, Identifier texture, float opacity) {
-        int i = ColorHelper.getWhite(opacity);
-        ctx.drawTexture(RenderPipelines.GUI_TEXTURED, texture, 0, 0, 0.0F, 0.0F, ctx.getScaledWindowWidth(), ctx.getScaledWindowHeight(), ctx.getScaledWindowWidth(), ctx.getScaledWindowHeight(), i);
+    public static void renderOverlay(GuiGraphics ctx, Identifier texture, float opacity) {
+        int i = ARGB.white(opacity);
+        ctx.blit(RenderPipelines.GUI_TEXTURED, texture, 0, 0, 0.0F, 0.0F, ctx.guiWidth(), ctx.guiHeight(), ctx.guiWidth(), ctx.guiHeight(), i);
     }
 
-    public static void setAlphaOverride(DrawContext context, float alphaOverride) {
+    public static void setAlphaOverride(GuiGraphics context, float alphaOverride) {
         ((AlphaOverrideAddon) context).ultraeffects$setAlphaOverride(alphaOverride);
     }
 
-    public static void resetAlphaOverride(DrawContext context) {
+    public static void resetAlphaOverride(GuiGraphics context) {
         ((AlphaOverrideAddon) context).ultraeffects$setAlphaOverride(null);
     }
 
@@ -160,22 +160,22 @@ public class UltraEffectsUtil {
         if (disableForTick) {
             UltraEffectsClient.PARRY_DISABLED = true;
         }
-        UltraEffectsUtil.playSound(sound, SoundCategory.PLAYERS, 0.9F + Random.create().nextInt(4) * 0.05F, 1F);
+        UltraEffectsUtil.playSound(sound, SoundSource.PLAYERS, 0.9F + RandomSource.create().nextInt(4) * 0.05F, 1F);
         EffectRegistry.FREEZE_EFFECT.display();
         EffectRegistry.FLASH_EFFECT.display();
     }
 
     public static boolean isRunningDeathScreenOverhaul() {
-        return MinecraftClient.getInstance().currentScreen instanceof DeathScreen && ModConfig.deathScreenOverhaul;
+        return Minecraft.getInstance().screen instanceof DeathScreen && ModConfig.deathScreenOverhaul;
     }
 
-    public static boolean isClientPlayer(Entity entity) {
-        MinecraftClient client = MinecraftClient.getInstance();
+    public static boolean isLocalPlayer(Entity entity) {
+        Minecraft client = Minecraft.getInstance();
         return client != null && client.player == entity;
     }
 
     public static boolean isSpectator() {
-        ClientPlayerEntity clientPlayer = getClientPlayer();
+        LocalPlayer clientPlayer = getLocalPlayer();
 
         if (clientPlayer != null) {
             return clientPlayer.isSpectator();
@@ -183,12 +183,12 @@ public class UltraEffectsUtil {
         return false;
     }
 
-    public static ClientPlayerEntity getClientPlayer() {
-        return MinecraftClient.getInstance().player;
+    public static LocalPlayer getLocalPlayer() {
+        return Minecraft.getInstance().player;
     }
 
-    public static void playSound(SoundEvent soundEvent, SoundCategory soundCategory, float pitch, float volume) {
-        MinecraftClient.getInstance().getSoundManager().play(
+    public static void playSound(SoundEvent soundEvent, SoundSource soundCategory, float pitch, float volume) {
+        Minecraft.getInstance().getSoundManager().play(
                 new UnstoppableSoundInstance(soundEvent, soundCategory, pitch, volume)
         );
     }

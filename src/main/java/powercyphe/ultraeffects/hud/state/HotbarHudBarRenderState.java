@@ -1,8 +1,8 @@
 package powercyphe.ultraeffects.hud.state;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.math.ColorHelper;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.Mth;
 import org.joml.Math;
 import powercyphe.ultraeffects.hud.HotbarHud;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
@@ -16,7 +16,7 @@ public record HotbarHudBarRenderState(float currentValue, float smoothedCurrent,
 
     public HotbarHudBarRenderState(HotbarHud.BarType barType, boolean hasOverlay, int overlayTick, float additionalValue, int width, int height, int cuts, int cutWidth) {
         this(barType.current, barType.smoothedCurrent, barType.smoothedPrevious, barType.max, hasOverlay, overlayTick, additionalValue, width, height, cuts, cutWidth, barType.getColor(),
-                ColorHelper.withBrightness(barType.getColor(), 0.25F));
+                ARGB.setBrightness(barType.getColor(), 0.25F));
     }
 
     public HotbarHudBarRenderState(HotbarHud.BarType barType, int width, int height, int cuts, int cutWidth) {
@@ -24,39 +24,39 @@ public record HotbarHudBarRenderState(float currentValue, float smoothedCurrent,
     }
 
     // Rendering
-    public void render(HotbarHudRenderState state, DrawContext context, int x, int y, float tickProgress, boolean hasBackground) {
+    public void render(HotbarHudRenderState state, GuiGraphics context, int x, int y, float tickProgress, boolean hasBackground) {
         this.renderBaseBar(state, context, x, y, tickProgress, hasBackground);
         if (this.hasOverlay) {
             this.renderOverlayBar(state, context, x, y, tickProgress);
         }
     }
 
-    private void renderBaseBar(HotbarHudRenderState state, DrawContext context, int x, int y, float tickProgress, boolean hasBackground) {
+    private void renderBaseBar(HotbarHudRenderState state, GuiGraphics context, int x, int y, float tickProgress, boolean hasBackground) {
         if (hasBackground) {
             UltraEffectsUtil.renderHorizontalColoredBar(context, x, y, 1, this.width, this.height, state.adjustColor(this.backgroundColor), this.cuts, this.cutWidth);
         }
         UltraEffectsUtil.renderHorizontalColoredBar(context, x, y, this.getProgress(tickProgress), this.width, this.height, state.adjustColor(this.color), this.cuts, this.cutWidth);
     }
 
-    private void renderOverlayBar(HotbarHudRenderState state, DrawContext context, int x, int y, float tickProgress) {
+    private void renderOverlayBar(HotbarHudRenderState state, GuiGraphics context, int x, int y, float tickProgress) {
         tickProgress = tickProgress * (this.overlayTick > 10 ? -1 : 1);
 
         float alpha = Math.abs(Math.sin(Math.toRadians((this.overlayTick + tickProgress) / 50F * 360F)));
-        int overlayColor = state.adjustColor(ColorHelper.withAlpha(MathHelper.lerp(alpha, 0F, 0.5F), this.color));
+        int overlayColor = state.adjustColor(ARGB.color(Mth.lerp(alpha, 0F, 0.5F), this.color));
 
         UltraEffectsUtil.renderHorizontalColoredBar(context, x, y, this.getOverlayProgress(tickProgress), this.width, this.height, overlayColor, this.cuts, this.cutWidth);
     }
 
     // Helper Methods
     public float getOverlayProgress(float tickProgress) {
-        return MathHelper.clamp((this.getProgress(tickProgress) + this.additionalValue) / this.maxValue, 0, 1);
+        return Mth.clamp((this.getProgress(tickProgress) + this.additionalValue) / this.maxValue, 0, 1);
     }
 
     public float getCurrent(float tickProgress) {
-        return MathHelper.lerp(tickProgress, this.smoothedPrevious, this.smoothedCurrent);
+        return Mth.lerp(tickProgress, this.smoothedPrevious, this.smoothedCurrent);
     }
 
     public float getProgress(float tickProgress) {
-        return MathHelper.clamp(MathHelper.lerp(tickProgress, this.smoothedPrevious, this.smoothedCurrent) / this.maxValue, 0, 1);
+        return Mth.clamp(Mth.lerp(tickProgress, this.smoothedPrevious, this.smoothedCurrent) / this.maxValue, 0, 1);
     }
 }

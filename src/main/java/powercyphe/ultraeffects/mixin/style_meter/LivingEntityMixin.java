@@ -1,7 +1,7 @@
 package powercyphe.ultraeffects.mixin.style_meter;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +17,7 @@ public class LivingEntityMixin implements LastDamageSource {
     @Unique
     private DamageSource lastDamageSource = null;
 
-    @Inject(method = "onDamaged", at = @At("HEAD"))
+    @Inject(method = "handleDamageEvent", at = @At("HEAD"))
     private void ultraeffects$combo(DamageSource source, CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
 
@@ -25,7 +25,7 @@ public class LivingEntityMixin implements LastDamageSource {
         DamageHandler.onDamaged(entity, source);
     }
 
-    @Inject(method = "handleStatus", at = @At("HEAD"))
+    @Inject(method = "handleEntityEvent", at = @At("HEAD"))
     private void ultraeffects$onDeath(byte status, CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (status == 3) {

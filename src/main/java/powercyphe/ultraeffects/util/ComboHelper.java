@@ -1,25 +1,25 @@
 package powercyphe.ultraeffects.util;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 
 public class ComboHelper {
 
-    public static DefaultedList<ComboInstance> COMBO_TYPES = DefaultedList.of();
+    public static NonNullList<ComboInstance> COMBO_TYPES = NonNullList.create();
 
     public static ComboInstance MELEE = register(new ComboInstance("melee", 30, 3, true, combo -> {
-        return 10 + MathHelper.clamp((combo-2) * 15F, 0F, 100F);
+        return 10 + Mth.clamp((combo-2) * 15F, 0F, 100F);
     }));
     public static ComboInstance PROJECTILE = register(new ComboInstance("projectile", 0, 1, false, combo -> {
-        return 10 + MathHelper.clamp((combo-2) * 20F, 0F, 100F);
+        return 10 + Mth.clamp((combo-2) * 20F, 0F, 100F);
     }));
     public static ComboInstance KILL = register(new ComboInstance("kill", 1, 2, false, combo -> {
-        return 10 + MathHelper.clamp((combo-3) * 30F, 0F, 100F);
+        return 10 + Mth.clamp((combo-3) * 30F, 0F, 100F);
     }));
 
     public static ComboInstance register(ComboInstance comboInstance) {
@@ -70,7 +70,7 @@ public class ComboHelper {
             this.ticks = this.defaultTicks;
 
             if (this.combo >= this.required) {
-                UltraEffectsUtil.addStyle(Text.translatable("ultraeffects.style_meter.style.combo_" + this.id, this.combo), this.pointCalculation.apply(this.combo));
+                UltraEffectsUtil.addStyle(Component.translatable("ultraeffects.style_meter.style.combo_" + this.id, this.combo), this.pointCalculation.apply(this.combo));
                 return true;
             }
             return false;
@@ -85,7 +85,7 @@ public class ComboHelper {
             this.ticks = this.defaultTicks;
 
             if (this.combo >= this.required) {
-                UltraEffectsUtil.addStyle(Text.translatable("ultraeffects.style_meter.style.combo_" + this.id, this.combo), this.pointCalculation.apply(this.combo));
+                UltraEffectsUtil.addStyle(Component.translatable("ultraeffects.style_meter.style.combo_" + this.id, this.combo), this.pointCalculation.apply(this.combo));
                 return true;
             }
             return false;

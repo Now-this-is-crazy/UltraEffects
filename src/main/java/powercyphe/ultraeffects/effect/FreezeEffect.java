@@ -1,6 +1,6 @@
 package powercyphe.ultraeffects.effect;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import powercyphe.ultraeffects.ModConfig;
 import powercyphe.ultraeffects.mixin.accessor.MinecraftClientAccessor;
 
@@ -10,8 +10,8 @@ public class FreezeEffect extends TickingEffect {
 
     @Override
     public void display() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        client.getWindow().swapBuffers(((MinecraftClientAccessor) client).ultraeffects$getTracyFrameCapturer());
+        Minecraft client = Minecraft.getInstance();
+        client.getWindow().updateDisplay(((MinecraftClientAccessor) client).ultraeffects$getTracyFrameCapture());
 
         freezeTicks = ModConfig.parryFreezeTicks + 1;
         lastFreezeTicks = freezeTicks;
@@ -25,6 +25,6 @@ public class FreezeEffect extends TickingEffect {
     }
 
     public boolean shouldPause() {
-        return freezeTicks > 0 && freezeTicks < lastFreezeTicks && !MinecraftClient.getInstance().isPaused();
+        return freezeTicks > 0 && freezeTicks < lastFreezeTicks && !Minecraft.getInstance().isPaused();
     }
 }

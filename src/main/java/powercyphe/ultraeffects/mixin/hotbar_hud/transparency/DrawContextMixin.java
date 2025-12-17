@@ -1,8 +1,8 @@
 package powercyphe.ultraeffects.mixin.hotbar_hud.transparency;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.item.KeyedItemRenderState;
-import net.minecraft.util.math.ColorHelper;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.item.TrackingItemStackRenderState;
+import net.minecraft.util.ARGB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,17 +10,17 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import powercyphe.ultraeffects.util.AlphaOverrideAddon;
 
-@Mixin(DrawContext.class)
+@Mixin(GuiGraphics.class)
 public class DrawContextMixin implements AlphaOverrideAddon {
 
     @Unique
     public Float alphaOverride = null;
 
     // Item
-    @ModifyArg(method = "drawItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;III)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/render/state/ItemGuiElementRenderState;<init>(Ljava/lang/String;Lorg/joml/Matrix3x2f;Lnet/minecraft/client/render/item/KeyedItemRenderState;IILnet/minecraft/client/gui/ScreenRect;)V"),
+    @ModifyArg(method = "renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;III)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/render/state/GuiItemRenderState;<init>(Ljava/lang/String;Lorg/joml/Matrix3x2f;Lnet/minecraft/client/renderer/item/TrackingItemStackRenderState;IILnet/minecraft/client/gui/navigation/ScreenRectangle;)V"),
     index = 2)
-    private KeyedItemRenderState ultraeffects$alphaOverrideItem(KeyedItemRenderState state) {
+    private TrackingItemStackRenderState ultraeffects$alphaOverrideItem(TrackingItemStackRenderState state) {
         if (this.alphaOverride != null) {
             ((AlphaOverrideAddon) state).ultraeffects$setAlphaOverride(this.alphaOverride);
         }
@@ -28,20 +28,20 @@ public class DrawContextMixin implements AlphaOverrideAddon {
     }
 
     // Text
-    @ModifyVariable(method = "drawText(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;IIIZ)V", at = @At("HEAD"), index = 5, argsOnly = true)
+    @ModifyVariable(method = "drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;IIIZ)V", at = @At("HEAD"), index = 5, argsOnly = true)
     private int ultraeffects$alphaOverrideText(int color) {
         if (this.alphaOverride != null) {
-            color = ColorHelper.withAlpha((int) (ColorHelper.getAlpha(color) * this.alphaOverride), color);
+            color = ARGB.color((int) (ARGB.alpha(color) * this.alphaOverride), color);
         }
         return color;
     }
 
 
     // Item Bar
-    @ModifyArg(method = "drawItemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V"), index = 5)
+    @ModifyArg(method = "renderItemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V"), index = 5)
     private int ultraeffects$alphaOverrideItemBar(int color) {
         if (this.alphaOverride != null) {
-            color = ColorHelper.withAlpha(ColorHelper.getAlpha(color) * this.alphaOverride, color);
+            color = ARGB.color(ARGB.alpha(color) * this.alphaOverride, color);
         }
         return color;
     }

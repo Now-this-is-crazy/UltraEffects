@@ -1,8 +1,8 @@
 package powercyphe.ultraeffects.effect;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.Identifier;
 import powercyphe.ultraeffects.ModConfig;
 import powercyphe.ultraeffects.registry.EffectRegistry;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
@@ -30,7 +30,7 @@ public class FlashEffect extends OverlayEffect {
     }
 
     @Override
-    public void render(DrawContext ctx, RenderTickCounter tickCounter) {
+    public void render(GuiGraphics ctx, DeltaTracker tickCounter) {
         if (this.flashTicks > 0) {
             UltraEffectsUtil.renderOverlay(ctx, this.getOverlay(), this.getOpacity());
         }

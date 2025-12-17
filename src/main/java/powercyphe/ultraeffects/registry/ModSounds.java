@@ -1,6 +1,6 @@
 package powercyphe.ultraeffects.registry;
 
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
 import powercyphe.ultraeffects.UltraEffectsClient;
 
 public class ModSounds {
@@ -16,6 +16,6 @@ public class ModSounds {
     public static SoundEvent STYLE_METER_CLICK = soundEvent("style_meter_click");
 
     public static SoundEvent soundEvent(String path) {
-        return SoundEvent.of(UltraEffectsClient.id(path));
+        return SoundEvent.createVariableRangeEvent(UltraEffectsClient.id(path));
     }
 }

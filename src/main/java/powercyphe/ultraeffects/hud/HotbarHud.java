@@ -2,14 +2,14 @@ package powercyphe.ultraeffects.hud;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Arm;
-import net.minecraft.util.math.ColorHelper;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import powercyphe.ultraeffects.ModConfig;
@@ -28,22 +28,22 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
-    private TextRenderer textRenderer = null;
+    private Font textRenderer = null;
 
     private final HotbarHudRenderState hotbarHudState = new HotbarHudRenderState();
 
     @Override
-    public void render(DrawContext context, RenderTickCounter renderTickCounter) {
+    public void render(GuiGraphics context, DeltaTracker renderTickCounter) {
         if (this.textRenderer != null) {
-            this.hotbarHudState.render(context, this.textRenderer, renderTickCounter.getTickProgress(true));
+            this.hotbarHudState.render(context, this.textRenderer, renderTickCounter.getGameTimeDeltaPartialTick(true));
         }
     }
 
     @Override
-    public void onStartTick(MinecraftClient client) {
-        ClientPlayerEntity clientPlayer = UltraEffectsUtil.getClientPlayer();
+    public void onStartTick(Minecraft client) {
+        LocalPlayer clientPlayer = UltraEffectsUtil.getLocalPlayer();
         if (this.textRenderer == null) {
-            this.textRenderer = client.textRenderer;
+            this.textRenderer = client.font;
         }
 
         if (clientPlayer != null) {
@@ -55,11 +55,11 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
         this.updateRenderState(client);
     }
 
-    public int getX(MinecraftClient client) {
+    public int getX(Minecraft client) {
         return switch (ModConfig.hotbarHudSide) {
             case LEFT -> 4;
-            case RIGHT -> client.getWindow().getScaledWidth() - 154;
-            case null, default -> client.options.getMainArm().getValue() == Arm.RIGHT ? 4 : client.getWindow().getScaledWidth() - 154;
+            case RIGHT -> client.getWindow().getGuiScaledWidth() - 154;
+            case null, default -> client.options.mainHand().get() == HumanoidArm.RIGHT ? 4 : client.getWindow().getGuiScaledWidth() - 154;
         };
     }
 
@@ -67,8 +67,8 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
         return UltraEffectsClient.HOTBAR_HUD.hotbarHudState;
     }
 
-    public void updateRenderState(MinecraftClient client) {
-        ClientPlayerEntity clientPlayer = UltraEffectsUtil.getClientPlayer();
+    public void updateRenderState(Minecraft client) {
+        LocalPlayer clientPlayer = UltraEffectsUtil.getLocalPlayer();
         if (ModConfig.hotbarHudEnabled || ModConfig.hotbarHudCursor) {
             float extraHealth = 0F;
             float extraHunger = 0F;
@@ -91,18 +91,18 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
         // Hotbar Hud
         if (ModConfig.hotbarHudEnabled) {
             this.hotbarHudState.x = this.getX(client);
-            this.hotbarHudState.y = client.getWindow().getScaledHeight();
+            this.hotbarHudState.y = client.getWindow().getGuiScaledHeight();
 
             this.hotbarHudState.overlayTick += 1;
             if (this.hotbarHudState.overlayTick >= 50) {
                 this.hotbarHudState.overlayTick = 0;
             }
-            this.hotbarHudState.heldItemTooltipFade = ((InGameHudAccessor) client.inGameHud).ultraeffects$getHeldItemToolTipFade();
-            this.hotbarHudState.chatFocused = client.inGameHud.getChatHud().isChatFocused();
+            this.hotbarHudState.heldItemTooltipFade = ((InGameHudAccessor) client.gui).ultraeffects$getHeldItemToolTipFade();
+            this.hotbarHudState.chatFocused = client.gui.getChat().isChatFocused();
 
             if (clientPlayer != null) {
                 this.hotbarHudState.playerInventory = clientPlayer.getInventory();
-                this.hotbarHudState.offHandStack = clientPlayer.getOffHandStack();
+                this.hotbarHudState.offHandStack = clientPlayer.getOffhandItem();
 
                 // Experience Bar
                 this.hotbarHudState.experienceBar = clientPlayer.isCreative() ? Optional.empty() : Optional.of(new HotbarHudBarRenderState(BarType.EXPERIENCE, 118, 9, 15, 1));
@@ -134,9 +134,9 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
     // Status Bars
     public enum BarType {
         HEALTH(LivingEntity::getHealth, LivingEntity::getMaxHealth, 0xfe0000, 0xff1313,
-                () -> ColorHelper.getArgb(ModConfig.hotbarHudHealthColorRed, ModConfig.hotbarHudHealthColorGreen, ModConfig.hotbarHudHealthColorBlue)),
+                () -> ARGB.color(ModConfig.hotbarHudHealthColorRed, ModConfig.hotbarHudHealthColorGreen, ModConfig.hotbarHudHealthColorBlue)),
         ABSORPTION(LivingEntity::getAbsorptionAmount, LivingEntity::getMaxAbsorption, 0x00ff01, 0xd4af37,
-                () -> ColorHelper.getArgb(ModConfig.hotbarHudAbsorptionColorRed, ModConfig.hotbarHudAbsorptionColorGreen, ModConfig.hotbarHudAbsorptionColorBlue)),
+                () -> ARGB.color(ModConfig.hotbarHudAbsorptionColorRed, ModConfig.hotbarHudAbsorptionColorGreen, ModConfig.hotbarHudAbsorptionColorBlue)),
 
         /*
         ARMOR(clientPlayer -> (float) clientPlayer.getArmor(), clientPlayer -> 20F, 0xb8b9c4, 0xb8b9c4,
@@ -145,14 +145,14 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
                 () -> ColorHelper.getArgb(ModConfig.hotbarHudAirColorRed, ModConfig.hotbarHudAirColorGreen, ModConfig.hotbarHudAirColorBlue)),
         */
 
-        HUNGER(clientPlayer -> (float) clientPlayer.getHungerManager().getFoodLevel(), clientPlayer -> 20F, 0x00dafe, 0x9d6d43,
-                () -> ColorHelper.getArgb(ModConfig.hotbarHudHungerColorRed, ModConfig.hotbarHudHungerColorGreen, ModConfig.hotbarHudHungerColorBlue)),
-        EXPERIENCE(clientPlayer -> clientPlayer.experienceProgress * clientPlayer.getNextLevelExperience(), clientPlayer -> (float) clientPlayer.getNextLevelExperience(), 0xb3f37d, 0xb3f37d,
-                () -> ColorHelper.getArgb(ModConfig.hotbarHudExperienceColorRed, ModConfig.hotbarHudExperienceColorGreen, ModConfig.hotbarHudExperienceColorBlue))
+        HUNGER(clientPlayer -> (float) clientPlayer.getFoodData().getFoodLevel(), clientPlayer -> 20F, 0x00dafe, 0x9d6d43,
+                () -> ARGB.color(ModConfig.hotbarHudHungerColorRed, ModConfig.hotbarHudHungerColorGreen, ModConfig.hotbarHudHungerColorBlue)),
+        EXPERIENCE(clientPlayer -> clientPlayer.experienceProgress * clientPlayer.getXpNeededForNextLevel(), clientPlayer -> (float) clientPlayer.getXpNeededForNextLevel(), 0xb3f37d, 0xb3f37d,
+                () -> ARGB.color(ModConfig.hotbarHudExperienceColorRed, ModConfig.hotbarHudExperienceColorGreen, ModConfig.hotbarHudExperienceColorBlue))
         ;
 
-        private final Function<ClientPlayerEntity, Float> currentGetter;
-        private final Function<ClientPlayerEntity, Float> maxGetter;
+        private final Function<LocalPlayer, Float> currentGetter;
+        private final Function<LocalPlayer, Float> maxGetter;
 
         private final int ultrakillColor;
         private final int vanillaColor;
@@ -164,7 +164,7 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
         public float smoothedCurrent = 0F;
         public float smoothedPrevious = 0F;
 
-        BarType(Function<ClientPlayerEntity, Float> currentGetter, Function<ClientPlayerEntity, Float> maxGetter,
+        BarType(Function<LocalPlayer, Float> currentGetter, Function<LocalPlayer, Float> maxGetter,
                 int ultrakillColor, int vanillaColor, Supplier<Integer> customColor) {
             this.currentGetter = currentGetter;
             this.maxGetter = maxGetter;
@@ -174,7 +174,7 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
             this.customColor = customColor;
         }
 
-        public void tick(@NotNull ClientPlayerEntity player) {
+        public void tick(@NotNull LocalPlayer player) {
             this.smoothedPrevious = this.smoothedCurrent;
             this.smoothedCurrent = getSmoothNumber(this.current, this.smoothedCurrent);
 
@@ -184,9 +184,9 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
 
         public int getColor() {
             return switch (ModConfig.hotbarHudColors) {
-                case VANILLA -> ColorHelper.fullAlpha(this.vanillaColor);
-                case CUSTOM -> ColorHelper.fullAlpha(this.customColor.get());
-                case null, default -> ColorHelper.fullAlpha(this.ultrakillColor);
+                case VANILLA -> ARGB.opaque(this.vanillaColor);
+                case CUSTOM -> ARGB.opaque(this.customColor.get());
+                case null, default -> ARGB.opaque(this.ultrakillColor);
             };
         }
 

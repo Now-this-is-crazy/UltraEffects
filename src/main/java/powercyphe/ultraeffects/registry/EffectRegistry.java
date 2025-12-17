@@ -1,7 +1,7 @@
 package powercyphe.ultraeffects.registry;
 
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.Identifier;
 import powercyphe.ultraeffects.UltraEffectsClient;
 import powercyphe.ultraeffects.effect.*;
 
@@ -28,7 +28,7 @@ public class EffectRegistry {
     }
 
     public static <T extends C, C extends ScreenEffect> List<T> getEffectsByType(Class<C> type) {
-        DefaultedList<T> effectList = DefaultedList.of();
+        NonNullList<T> effectList = NonNullList.create();
         for (ScreenEffect screenEffect : EFFECTS.values()) {
             if (type.isInstance(screenEffect)) {
                 effectList.add((T) screenEffect);

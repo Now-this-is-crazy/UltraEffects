@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import powercyphe.ultraeffects.effect.TickingEffect;
@@ -33,7 +33,7 @@ public class UltraEffectsClient implements ClientModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			ComboHelper.tick();
 
-			if (!client.isPaused() && UltraEffectsUtil.getClientPlayer() != null) {
+			if (!client.isPaused() && UltraEffectsUtil.getLocalPlayer() != null) {
 				for (TickingEffect effect : EffectRegistry.getEffectsByType(TickingEffect.class)) {
 					effect.tick();
 				}
@@ -54,7 +54,7 @@ public class UltraEffectsClient implements ClientModInitializer {
 	}
 
 	public static Identifier id(String path) {
-		return Identifier.of(MOD_ID, path);
+		return Identifier.fromNamespaceAndPath(MOD_ID, path);
 	}
 
 }

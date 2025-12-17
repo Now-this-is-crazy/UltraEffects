@@ -1,10 +1,14 @@
 package powercyphe.ultraeffects.mixin;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityReference;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.TraceableEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ProjectileDeflection;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,8 +21,8 @@ import powercyphe.ultraeffects.util.DistanceTravelled;
 import powercyphe.ultraeffects.util.HitEntities;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
 
-@Mixin(ProjectileEntity.class)
-public abstract class ProjectileEntityMixin extends Entity implements Ownable, DistanceTravelled, HitEntities {
+@Mixin(Projectile.class)
+public abstract class ProjectileEntityMixin extends Entity implements TraceableEntity, DistanceTravelled, HitEntities {
 
     @Unique
     private int parryCooldown = -5;
@@ -27,25 +31,25 @@ public abstract class ProjectileEntityMixin extends Entity implements Ownable, D
     private float distanceTravelledClient = 0;
 
     @Unique
-    private DefaultedList<Entity> hitEntities;
+    private NonNullList<Entity> hitEntities;
 
-    public ProjectileEntityMixin(EntityType<?> type, World world) {
+    public ProjectileEntityMixin(EntityType<?> type, Level world) {
         super(type, world);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void ultraeffects$storeDistanceClient(CallbackInfo ci) {
-        ProjectileEntity entity = (ProjectileEntity) (Object) this;
-        if (entity.getEntityWorld().isClient()) {
-            this.distanceTravelledClient += (float) entity.getEntityPos().distanceTo(new Vec3d(entity.lastX, entity.lastY, entity.lastZ));
+        Projectile entity = (Projectile) (Object) this;
+        if (entity.level().isClientSide()) {
+            this.distanceTravelledClient += (float) entity.position().distanceTo(new Vec3(entity.xo, entity.yo, entity.zo));
         }
     }
 
     @Inject(method = "deflect", at = @At("HEAD"))
-    private void ultraeffects$parry(ProjectileDeflection deflection, Entity deflector, LazyEntityReference<Entity> lazyEntityReference, boolean fromAttack, CallbackInfoReturnable<Boolean> cir) {
-        if (UltraEffectsUtil.isClientPlayer(deflector) && fromAttack && deflection == ProjectileDeflection.REDIRECTED) {
-            if ((this.parryCooldown + 5) < this.age) {
-                this.parryCooldown = this.age;
+    private void ultraeffects$parry(ProjectileDeflection deflection, Entity deflector, EntityReference<Entity> lazyEntityReference, boolean fromAttack, CallbackInfoReturnable<Boolean> cir) {
+        if (UltraEffectsUtil.isLocalPlayer(deflector) && fromAttack && deflection == ProjectileDeflection.AIM_DEFLECT) {
+            if ((this.parryCooldown + 5) < this.tickCount) {
+                this.parryCooldown = this.tickCount;
 
                 UltraEffectsUtil.parryEffect(ModSounds.PARRY, ModConfig.parryProjectilesEnabled);
                 UltraEffectsUtil.addStyle("parry", 100);
@@ -54,14 +58,14 @@ public abstract class ProjectileEntityMixin extends Entity implements Ownable, D
     }
 
     @Override
-    public void ultraeffects$setHitEntities(DefaultedList<Entity> hitEntities) {
+    public void ultraeffects$setHitEntities(NonNullList<Entity> hitEntities) {
         this.hitEntities = hitEntities;
     }
 
     @Override
-    public DefaultedList<Entity> ultraeffects$getHitEntities() {
+    public NonNullList<Entity> ultraeffects$getHitEntities() {
         if (this.hitEntities == null) {
-            this.hitEntities = DefaultedList.of();
+            this.hitEntities = NonNullList.create();
         }
         return this.hitEntities;
     }

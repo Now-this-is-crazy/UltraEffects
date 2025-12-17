@@ -1,17 +1,17 @@
 package powercyphe.ultraeffects.sound;
 
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.sound.MovingSoundInstance;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
 
-public class UnstoppableSoundInstance extends MovingSoundInstance {
+public class UnstoppableSoundInstance extends AbstractTickableSoundInstance {
 
-    public UnstoppableSoundInstance(SoundEvent soundEvent, SoundCategory soundCategory, float pitch, float volume) {
-        super(soundEvent, soundCategory, Random.create());
-        this.repeat = false;
+    public UnstoppableSoundInstance(SoundEvent soundEvent, SoundSource soundCategory, float pitch, float volume) {
+        super(soundEvent, soundCategory, RandomSource.create());
+        this.looping = false;
 
         this.pitch = pitch;
         this.volume = volume;
@@ -20,7 +20,7 @@ public class UnstoppableSoundInstance extends MovingSoundInstance {
 
     @Override
     public void tick() {
-        ClientPlayerEntity clientPlayer = UltraEffectsUtil.getClientPlayer();
+        LocalPlayer clientPlayer = UltraEffectsUtil.getLocalPlayer();
         if (clientPlayer != null) {
             this.x = clientPlayer.getX();
             this.y = clientPlayer.getY();
@@ -29,7 +29,7 @@ public class UnstoppableSoundInstance extends MovingSoundInstance {
     }
 
     @Override
-    public boolean shouldAlwaysPlay() {
+    public boolean canStartSilent() {
         return true;
     }
 }

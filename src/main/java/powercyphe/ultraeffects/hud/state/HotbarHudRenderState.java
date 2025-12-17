@@ -1,18 +1,18 @@
 package powercyphe.ultraeffects.hud.state;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Arm;
-import net.minecraft.util.Colors;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.ColorHelper;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.CommonColors;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import powercyphe.ultraeffects.ModConfig;
 import powercyphe.ultraeffects.util.UltraEffectsUtil;
 
@@ -33,12 +33,12 @@ public class HotbarHudRenderState {
 
     public HotbarHudCursorRenderState cursorRenderState = HotbarHudCursorRenderState.DEFAULT;
 
-    public PlayerInventory playerInventory = null;
+    public Inventory playerInventory = null;
     public ItemStack offHandStack;
 
 
     // Rendering Methods
-    public void render(DrawContext context, TextRenderer textRenderer, float tickProgress) {
+    public void render(GuiGraphics context, Font textRenderer, float tickProgress) {
         if (this.shouldRender()) {
             this.renderBackground(context, textRenderer, this.x, this.y, tickProgress);
             this.renderBars(context, textRenderer, this.x, this.y, tickProgress);
@@ -49,8 +49,8 @@ public class HotbarHudRenderState {
         }
     }
 
-    public void renderBackground(DrawContext context, TextRenderer textRenderer, int x, int y, float tickProgress) {
-        int backgroundColor = adjustColor(ColorHelper.getArgb(
+    public void renderBackground(GuiGraphics context, Font textRenderer, int x, int y, float tickProgress) {
+        int backgroundColor = adjustColor(ARGB.color(
                 (int) (ModConfig.hotbarHudBackgroundOpacity * 255),
                 ModConfig.hotbarHudBackgroundColorRed,
                 ModConfig.hotbarHudBackgroundColorGreen,
@@ -70,8 +70,8 @@ public class HotbarHudRenderState {
         // Hotbar
         UltraEffectsUtil.renderRoundBox(context, x + 128, y - 27, x + 146, y - 95, backgroundColor);
 
-        int selectedColor = this.adjustColor(ColorHelper.withBrightness(backgroundColor, 0.65F));
-        int outerColor = this.adjustColor(ColorHelper.withBrightness(backgroundColor, 0.35F));
+        int selectedColor = this.adjustColor(ARGB.setBrightness(backgroundColor, 0.65F));
+        int outerColor = this.adjustColor(ARGB.setBrightness(backgroundColor, 0.35F));
 
         context.fill(x + 129, y - 53, x + 145, y - 54, selectedColor);
         context.fill(x + 129, y - 70, x + 145, y - 71, selectedColor);
@@ -83,63 +83,63 @@ public class HotbarHudRenderState {
         UltraEffectsUtil.renderRoundBox(context, x + 128, y - 4, x + 146, y - 26, backgroundColor);
     }
 
-    public void renderBars(DrawContext context, TextRenderer textRenderer, int x, int y, float tickProgress) {
+    public void renderBars(GuiGraphics context, Font textRenderer, int x, int y, float tickProgress) {
         this.healthBar.render(this, context, x + 4, y - 20, tickProgress, true);
         this.absorptionBar.render(this, context, x + 4, y - 20, tickProgress, false);
         this.staminaBar.render(this, context, x + 4, y - 10, tickProgress, true);
         this.experienceBar.ifPresent(experienceBar -> experienceBar.render(this, context, x + 4, y - 103, tickProgress, true));
 
         if (ModConfig.hotbarHudHealthNumberDisplay != ModConfig.HotbarHudHealthNumberDisplay.NEVER) {
-            MutableText healthText = Text.literal("+" + ModConfig.hotbarHudHealthNumberDisplay.healthGetter.apply(this.healthBar, this.absorptionBar, tickProgress));
-            context.drawText(textRenderer, healthText, x + 6, y - 24, adjustColor(Colors.WHITE), false);
+            MutableComponent healthText = Component.literal("+" + ModConfig.hotbarHudHealthNumberDisplay.healthGetter.apply(this.healthBar, this.absorptionBar, tickProgress));
+            context.drawString(textRenderer, healthText, x + 6, y - 24, adjustColor(CommonColors.WHITE), false);
         }
     }
 
-    public void renderItems(DrawContext context, TextRenderer textRenderer, int x, int y, float tickProgress) {
+    public void renderItems(GuiGraphics context, Font textRenderer, int x, int y, float tickProgress) {
         if (this.getVisibility() < 1) {
             UltraEffectsUtil.setAlphaOverride(context, this.getVisibility());
         }
         if (this.playerInventory != null) {
 
             // Main Hand
-            ItemStack mainHandStack = this.playerInventory.getSelectedStack();
+            ItemStack mainHandStack = this.playerInventory.getSelectedItem();
 
-            context.getMatrices().pushMatrix();
-            context.getMatrices().translate(x + 31, y - 92.5F);
+            context.pose().pushMatrix();
+            context.pose().translate(x + 31, y - 92.5F);
 
-            context.getMatrices().scale(4, 4);
-            context.drawItem(mainHandStack, 0, 0);
+            context.pose().scale(4, 4);
+            context.renderItem(mainHandStack, 0, 0);
 
-            context.getMatrices().popMatrix();
+            context.pose().popMatrix();
 
             // Hotbar
             for (int i = -2; i <= 2; i++) {
-                context.getMatrices().pushMatrix();
-                context.getMatrices().translate(x + 129, y - 70 + (16 * MathHelper.clamp(i, -1.8F, 1.8F)));
+                context.pose().pushMatrix();
+                context.pose().translate(x + 129, y - 70 + (16 * Mth.clamp(i, -1.8F, 1.8F)));
                 if (i != 0) {
-                    context.getMatrices().translate(2 * Math.abs(i), 2 * Math.abs(i));
-                    context.getMatrices().scale(1 - Math.abs(0.25F * i), 1 - Math.abs(0.25F * i));
+                    context.pose().translate(2 * Math.abs(i), 2 * Math.abs(i));
+                    context.pose().scale(1 - Math.abs(0.25F * i), 1 - Math.abs(0.25F * i));
                 }
 
-                context.drawItem(this.getInventorySlot(this.playerInventory, i), 0, 0);
-                context.drawStackOverlay(textRenderer, this.getInventorySlot(playerInventory, i), 0, 0);
+                context.renderItem(this.getInventorySlot(this.playerInventory, i), 0, 0);
+                context.renderItemDecorations(textRenderer, this.getInventorySlot(playerInventory, i), 0, 0);
 
-                context.getMatrices().popMatrix();
+                context.pose().popMatrix();
             }
 
             // Offhand
-            context.getMatrices().pushMatrix();
-            context.drawItem(this.offHandStack, x + 129, y - 23);
-            context.drawStackOverlay(textRenderer, this.offHandStack, x + 129, y - 23);
-            context.getMatrices().popMatrix();
+            context.pose().pushMatrix();
+            context.renderItem(this.offHandStack, x + 129, y - 23);
+            context.renderItemDecorations(textRenderer, this.offHandStack, x + 129, y - 23);
+            context.pose().popMatrix();
 
             // Main Hand Stack Name Display
             if (!mainHandStack.isEmpty()) {
-                MutableText mutableText = Text.empty().append(mainHandStack.getName()).formatted(mainHandStack.getRarity().getFormatting());
-                if (mainHandStack.contains(DataComponentTypes.CUSTOM_NAME)) {
-                    mutableText.formatted(Formatting.ITALIC);
+                MutableComponent mutableText = Component.empty().append(mainHandStack.getHoverName()).withStyle(mainHandStack.getRarity().color());
+                if (mainHandStack.has(DataComponents.CUSTOM_NAME)) {
+                    mutableText.withStyle(ChatFormatting.ITALIC);
                 }
-                int textWidth = textRenderer.getWidth(mutableText);
+                int textWidth = textRenderer.width(mutableText);
 
                 int displayAlpha = switch (ModConfig.hotbarHudItemNameDisplay) {
                     case ALWAYS -> 255;
@@ -149,14 +149,14 @@ public class HotbarHudRenderState {
                 };
 
                 if (displayAlpha > 0) {
-                    context.getMatrices().pushMatrix();
-                    context.getMatrices().translate(x + 64, y - 92);
+                    context.pose().pushMatrix();
+                    context.pose().translate(x + 64, y - 92);
                     if (textWidth > 120) {
-                        context.getMatrices().scale(Math.max(0.25F, 1 - ((textWidth - 120) * 0.0065F)));
+                        context.pose().scale(Math.max(0.25F, 1 - ((textWidth - 120) * 0.0065F)));
                     }
 
-                    context.drawCenteredTextWithShadow(textRenderer, mutableText, 0, 0, ColorHelper.withAlpha(displayAlpha, -1));
-                    context.getMatrices().popMatrix();
+                    context.drawCenteredString(textRenderer, mutableText, 0, 0, ARGB.color(displayAlpha, -1));
+                    context.pose().popMatrix();
                 }
             }
         }
@@ -165,7 +165,7 @@ public class HotbarHudRenderState {
 
 
     // Helper Methods
-    public ItemStack getInventorySlot(PlayerInventory inventory, int offset) {
+    public ItemStack getInventorySlot(Inventory inventory, int offset) {
         int slot = inventory.getSelectedSlot() + offset;
         if (slot < 0) {
             slot = 9 + slot;
@@ -173,11 +173,11 @@ public class HotbarHudRenderState {
             slot = slot - 9;
         }
 
-        return inventory.getMainStacks().get(slot);
+        return inventory.getNonEquipmentItems().get(slot);
     }
 
     public int adjustColor(int color) {
-        return ColorHelper.withAlpha((int) (this.getVisibility() * ColorHelper.getAlpha(color)), color);
+        return ARGB.color((int) (this.getVisibility() * ARGB.alpha(color)), color);
     }
 
     public float getVisibility() {
@@ -195,8 +195,8 @@ public class HotbarHudRenderState {
         return ModConfig.hotbarHudEnabled && this.getVisibility() > 0 && !UltraEffectsUtil.isRunningDeathScreenOverhaul();
     }
 
-    public boolean shouldShiftChat(MinecraftClient client) {
-        return this.shouldRender() && !UltraEffectsUtil.isSpectator() && client.options.getMainArm().getValue() == Arm.RIGHT;
+    public boolean shouldShiftChat(Minecraft client) {
+        return this.shouldRender() && !UltraEffectsUtil.isSpectator() && client.options.mainHand().get() == HumanoidArm.RIGHT;
     }
 
 }

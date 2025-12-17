@@ -2,11 +2,11 @@ package powercyphe.ultraeffects;
 
 import com.mojang.datafixers.util.Function3;
 import eu.midnightdust.lib.config.MidnightConfig;
-import net.minecraft.client.gui.DrawContext;
 import powercyphe.ultraeffects.hud.state.HotbarHudBarRenderState;
 
 import java.util.Arrays;
 import java.util.List;
+import net.minecraft.client.gui.GuiGraphics;
 
 public class ModConfig extends MidnightConfig {
 
@@ -306,12 +306,12 @@ public class ModConfig extends MidnightConfig {
             this.isBottom = isBottom;
         }
 
-        public int x(DrawContext context) {
-            return this.isRight ? context.getScaledWindowWidth() - 132 : 4;
+        public int x(GuiGraphics context) {
+            return this.isRight ? context.guiWidth() - 132 : 4;
         }
 
-        public int y(DrawContext context) {
-            return this.isBottom ? context.getScaledWindowHeight() - 108 : 4;
+        public int y(GuiGraphics context) {
+            return this.isBottom ? context.guiHeight() - 108 : 4;
         }
 
     }

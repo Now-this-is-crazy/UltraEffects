@@ -1,13 +1,13 @@
 package powercyphe.ultraeffects.mixin.death_sequence;
 
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.DeathScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.ColorHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ActiveTextCollector;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.DeathScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.ARGB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -23,14 +23,14 @@ import powercyphe.ultraeffects.mixin.accessor.DeathScreenAccessor;
 @Mixin(DeathScreen.class)
 public abstract class DeathScreenMixin extends Screen implements DeathScreenAccessor {
 
-    @Shadow private int ticksSinceDeath;
+    @Shadow private int delayTicker;
 
     @Shadow protected abstract void setButtonsActive(boolean active);
 
     @Unique
     private final DeathScreenHud deathScreenHud = new DeathScreenHud();
 
-    protected DeathScreenMixin(Text title) {
+    protected DeathScreenMixin(Component title) {
         super(title);
     }
 
@@ -40,7 +40,7 @@ public abstract class DeathScreenMixin extends Screen implements DeathScreenAcce
      * be at more optimal positions for the custom death screen
      **/
 
-    @ModifyArgs(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;dimensions(IIII)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;", ordinal = 0))
+    @ModifyArgs(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/Button$Builder;bounds(IIII)Lnet/minecraft/client/gui/components/Button$Builder;", ordinal = 0))
     private void ultraeffects$respawnButton(Args args) {
         if (ModConfig.deathScreenOverhaul) {
             args.set(0, 110);
@@ -48,7 +48,7 @@ public abstract class DeathScreenMixin extends Screen implements DeathScreenAcce
         }
     }
 
-    @ModifyArgs(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;dimensions(IIII)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;", ordinal = 1))
+    @ModifyArgs(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/Button$Builder;bounds(IIII)Lnet/minecraft/client/gui/components/Button$Builder;", ordinal = 1))
     private void ultraeffects$titleScreenButton(Args args) {
         if (ModConfig.deathScreenOverhaul) {
             args.set(0, this.width - 310);
@@ -62,14 +62,14 @@ public abstract class DeathScreenMixin extends Screen implements DeathScreenAcce
      * from working while the Death Sequence is running
      **/
 
-    @WrapWithCondition(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/DeathScreen;setButtonsActive(Z)V"))
+    @WrapWithCondition(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/DeathScreen;setButtonsActive(Z)V"))
     private boolean ultraeffects$death_sequence(DeathScreen screen, boolean active) {
         return !ModConfig.deathScreenOverhaul;
     }
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;tick()V"))
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;tick()V"))
     private void ultraeffects$death_sequence(CallbackInfo ci) {
-        if (ModConfig.deathScreenOverhaul && this.ticksSinceDeath > DeathScreenHud.SEQUENCE_TICKS) {
+        if (ModConfig.deathScreenOverhaul && this.delayTicker > DeathScreenHud.SEQUENCE_TICKS) {
             this.setButtonsActive(true);
         }
     }
@@ -79,27 +79,27 @@ public abstract class DeathScreenMixin extends Screen implements DeathScreenAcce
      * Renders the custom assets if the overhaul is enabled.
      **/
 
-    @WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/gui/DrawContext;IIF)V"))
-    private boolean ultraeffects$death_sequence(Screen screen, DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+    @WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V"))
+    private boolean ultraeffects$death_sequence(Screen screen, GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
         if (ModConfig.deathScreenOverhaul) {
-            this.deathScreenHud.render(context, this.textRenderer, this.ticksSinceDeath);
-            return this.ticksSinceDeath > DeathScreenHud.SEQUENCE_TICKS;
+            this.deathScreenHud.render(context, this.font, this.delayTicker);
+            return this.delayTicker > DeathScreenHud.SEQUENCE_TICKS;
         }
         return true;
     }
 
-    @ModifyArgs(method = "fillBackgroundGradient", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fillGradient(IIIIII)V"))
+    @ModifyArgs(method = "renderDeathBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fillGradient(IIIIII)V"))
     private static void ultraeffects$death_sequence(Args args) {
         if (ModConfig.deathScreenOverhaul) {
-            MinecraftClient client = MinecraftClient.getInstance();
+            Minecraft client = Minecraft.getInstance();
 
             float alpha = 0.75F;
-            if (client.currentScreen instanceof DeathScreen deathScreen) {
+            if (client.screen instanceof DeathScreen deathScreen) {
                 alpha = (float) ((DeathScreenAccessor) deathScreen).ultraeffects$getTicksSinceDeath() / DeathScreenHud.SEQUENCE_TICKS * alpha;
             }
 
-            args.set(4, ColorHelper.withAlpha(alpha, 0x000000));
-            args.set(5, ColorHelper.withAlpha(alpha, 0x111111));
+            args.set(4, ARGB.color(alpha, 0x000000));
+            args.set(5, ARGB.color(alpha, 0x111111));
         }
     }
 
@@ -109,14 +109,14 @@ public abstract class DeathScreenMixin extends Screen implements DeathScreenAcce
      * if the overhaul is enabled
      **/
 
-    @WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawCenteredTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"))
-    private boolean ultraeffects$death_sequence(DrawContext instance, TextRenderer textRenderer, Text text, int centerX, int y, int color) {
+    @WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/DeathScreen;visitText(Lnet/minecraft/client/gui/ActiveTextCollector;)V"))
+    private boolean ultraeffects$death_sequence(DeathScreen instance, ActiveTextCollector activeTextCollector) {
         return !ModConfig.deathScreenOverhaul;
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/gui/DrawContext;IIF)V", shift = At.Shift.AFTER), cancellable = true)
-    private void ultraeffects$death_sequence(DrawContext context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
-        if (ModConfig.deathScreenOverhaul && this.ticksSinceDeath > DeathScreenHud.SEQUENCE_TICKS) {
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V", shift = At.Shift.AFTER), cancellable = true)
+    private void ultraeffects$death_sequence(GuiGraphics context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
+        if (ModConfig.deathScreenOverhaul && this.delayTicker > DeathScreenHud.SEQUENCE_TICKS) {
             ci.cancel();
         }
     }

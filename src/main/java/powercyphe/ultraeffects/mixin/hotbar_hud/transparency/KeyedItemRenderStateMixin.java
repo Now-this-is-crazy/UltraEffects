@@ -1,11 +1,11 @@
 package powercyphe.ultraeffects.mixin.hotbar_hud.transparency;
 
-import net.minecraft.client.render.item.KeyedItemRenderState;
+import net.minecraft.client.renderer.item.TrackingItemStackRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import powercyphe.ultraeffects.util.AlphaOverrideAddon;
 
-@Mixin(KeyedItemRenderState.class)
+@Mixin(TrackingItemStackRenderState.class)
 public class KeyedItemRenderStateMixin implements AlphaOverrideAddon {
 
     @Unique

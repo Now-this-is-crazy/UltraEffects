@@ -1,11 +1,11 @@
 package powercyphe.ultraeffects.effect;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Pair;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.util.Tuple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import powercyphe.ultraeffects.ModConfig;
@@ -23,8 +23,8 @@ public class StyleMeterEffect extends TickingEffect {
     public float threshold, nextThreshold = 0;
     public static float styleMax = getNextThreshold(StyleRank.values()[StyleRank.values().length-1]);
 
-    public DefaultedList<Pair<Text, Integer>> styleList = DefaultedList.of();
-    public DefaultedList<Pair<Text, Float>> styleQueue = DefaultedList.of();
+    public NonNullList<Tuple<Component, Integer>> styleList = NonNullList.create();
+    public NonNullList<Tuple<Component, Float>> styleQueue = NonNullList.create();
 
     @Override
     public void display() {}
@@ -32,7 +32,7 @@ public class StyleMeterEffect extends TickingEffect {
     @Override
     public void tick() {
         if (this.style > 0) {
-            this.style = MathHelper.clamp(this.style - (this.drainPerSecond / 20F), 0F, styleMax);
+            this.style = Mth.clamp(this.style - (this.drainPerSecond / 20F), 0F, styleMax);
 
             if (this.style < this.threshold) {
                 updateStyleRank();
@@ -41,31 +41,31 @@ public class StyleMeterEffect extends TickingEffect {
         }
 
         if (!this.styleQueue.isEmpty()) {
-            Pair<Text, Float> pair = this.styleQueue.removeFirst();
-            this.style += pair.getRight();
+            Tuple<Component, Float> pair = this.styleQueue.removeFirst();
+            this.style += pair.getB();
 
-            if (!pair.getLeft().getString().isEmpty()) {
+            if (!pair.getA().getString().isEmpty()) {
                 if (this.styleList.size() > 6) {
                     this.styleList.remove(6);
                 }
-                this.styleList.addFirst(new Pair<>(pair.getLeft(), 140));
+                this.styleList.addFirst(new Tuple<>(pair.getA(), 140));
                 if (this.shouldDisplay() && ModConfig.styleMeterSound) {
-                    UltraEffectsUtil.playSound(ModSounds.STYLE_METER_CLICK, SoundCategory.PLAYERS, 1F, 0.25F);
+                    UltraEffectsUtil.playSound(ModSounds.STYLE_METER_CLICK, SoundSource.PLAYERS, 1F, 0.25F);
                 }
             }
             updateStyleRank();
         }
 
-        List<Pair<Text, Integer>> marked = new ArrayList<>();
-        for (Pair<Text, Integer> pair : this.styleList) {
+        List<Tuple<Component, Integer>> marked = new ArrayList<>();
+        for (Tuple<Component, Integer> pair : this.styleList) {
             int index = this.styleList.indexOf(pair);
-            int styleDuration = pair.getRight();
+            int styleDuration = pair.getB();
 
             styleDuration--;
             if (styleDuration <= 0) {
                 marked.add(pair);
             } else {
-                pair.setRight(styleDuration);
+                pair.setB(styleDuration);
                 this.styleList.set(index, pair);
             }
         }
@@ -73,8 +73,8 @@ public class StyleMeterEffect extends TickingEffect {
         this.styleList.removeAll(marked);
     }
 
-    public void addStyle(Text text, float points) {
-        this.styleQueue.add(new Pair<>(text, points));
+    public void addStyle(Component text, float points) {
+        this.styleQueue.add(new Tuple<>(text, points));
     }
 
     public void updateStyleRank() {
@@ -94,7 +94,7 @@ public class StyleMeterEffect extends TickingEffect {
     }
 
     public boolean shouldDisplay() {
-        if (MinecraftClient.getInstance().debugHudEntryList.isF3Enabled()) {
+        if (Minecraft.getInstance().debugEntries.isOverlayVisible()) {
             return false;
         }
         return switch (ModConfig.styleMeterDisplayCondition) {
@@ -110,7 +110,7 @@ public class StyleMeterEffect extends TickingEffect {
         if (this.style <= 0) {
             return 0F;
         }
-        return MathHelper.clamp((this.style - this.threshold) / (this.nextThreshold - this.threshold), 0F, 1F);
+        return Mth.clamp((this.style - this.threshold) / (this.nextThreshold - this.threshold), 0F, 1F);
     }
 
     private static float getThreshold(@NotNull StyleRank rank) {

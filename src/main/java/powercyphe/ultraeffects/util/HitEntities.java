@@ -1,10 +1,10 @@
 package powercyphe.ultraeffects.util;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.entity.Entity;
 
 public interface HitEntities {
 
-    void ultraeffects$setHitEntities(DefaultedList<Entity> entities);
-    DefaultedList<Entity> ultraeffects$getHitEntities();
+    void ultraeffects$setHitEntities(NonNullList<Entity> entities);
+    NonNullList<Entity> ultraeffects$getHitEntities();
 }
