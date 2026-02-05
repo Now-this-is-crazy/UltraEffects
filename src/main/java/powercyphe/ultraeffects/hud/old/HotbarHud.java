@@ -1,4 +1,4 @@
-package powercyphe.ultraeffects.hud;
+package powercyphe.ultraeffects.hud.old;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
@@ -12,13 +12,13 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
-import powercyphe.ultraeffects.ModConfig;
+import powercyphe.ultraeffects.UEConfig;
 import powercyphe.ultraeffects.UltraEffectsClient;
-import powercyphe.ultraeffects.hud.state.HotbarHudBarRenderState;
-import powercyphe.ultraeffects.hud.state.HotbarHudCursorRenderState;
-import powercyphe.ultraeffects.hud.state.HotbarHudRenderState;
+import powercyphe.ultraeffects.hud.old.state.HotbarHudBarRenderState;
+import powercyphe.ultraeffects.hud.old.state.HotbarHudCursorRenderState;
+import powercyphe.ultraeffects.hud.old.state.HotbarHudRenderState;
 import powercyphe.ultraeffects.mixin.accessor.InGameHudAccessor;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.util.UEUtil;
 import squeek.appleskin.client.HUDOverlayHandler;
 import squeek.appleskin.helpers.ConsumableFood;
 import squeek.appleskin.helpers.FoodHelper;
@@ -41,7 +41,7 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
 
     @Override
     public void onStartTick(Minecraft client) {
-        LocalPlayer clientPlayer = UltraEffectsUtil.getLocalPlayer();
+        LocalPlayer clientPlayer = UEUtil.getLocalPlayer();
         if (this.textRenderer == null) {
             this.textRenderer = client.font;
         }
@@ -56,7 +56,7 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
     }
 
     public int getX(Minecraft client) {
-        return switch (ModConfig.hotbarHudSide) {
+        return switch (UEConfig.hotbarHudSide) {
             case LEFT -> 4;
             case RIGHT -> client.getWindow().getGuiScaledWidth() - 154;
             case null, default -> client.options.mainHand().get() == HumanoidArm.RIGHT ? 4 : client.getWindow().getGuiScaledWidth() - 154;
@@ -68,8 +68,8 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
     }
 
     public void updateRenderState(Minecraft client) {
-        LocalPlayer clientPlayer = UltraEffectsUtil.getLocalPlayer();
-        if (ModConfig.hotbarHudEnabled || ModConfig.hotbarHudCursor) {
+        LocalPlayer clientPlayer = UEUtil.getLocalPlayer();
+        if (UEConfig.hotbarHudEnabled || UEConfig.hotbarHudCursor) {
             float extraHealth = 0F;
             float extraHunger = 0F;
 
@@ -89,7 +89,7 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
         }
 
         // Hotbar Hud
-        if (ModConfig.hotbarHudEnabled) {
+        if (UEConfig.hotbarHudEnabled) {
             this.hotbarHudState.x = this.getX(client);
             this.hotbarHudState.y = client.getWindow().getGuiScaledHeight();
 
@@ -110,7 +110,7 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
         }
 
         // Cursor Hud
-        if (ModConfig.hotbarHudCursor) {
+        if (UEConfig.hotbarHudCursor) {
             float healthFade = this.hotbarHudState.cursorRenderState.healthFade();
             if (this.hotbarHudState.healthBar.smoothedPrevious() != this.hotbarHudState.healthBar.smoothedCurrent()
                     || this.hotbarHudState.absorptionBar.smoothedPrevious() != this.hotbarHudState.absorptionBar.smoothedCurrent()) {
@@ -134,9 +134,9 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
     // Status Bars
     public enum BarType {
         HEALTH(LivingEntity::getHealth, LivingEntity::getMaxHealth, 0xfe0000, 0xff1313,
-                () -> ARGB.color(ModConfig.hotbarHudHealthColorRed, ModConfig.hotbarHudHealthColorGreen, ModConfig.hotbarHudHealthColorBlue)),
+                () -> ARGB.color(UEConfig.hotbarHudHealthColorRed, UEConfig.hotbarHudHealthColorGreen, UEConfig.hotbarHudHealthColorBlue)),
         ABSORPTION(LivingEntity::getAbsorptionAmount, LivingEntity::getMaxAbsorption, 0x00ff01, 0xd4af37,
-                () -> ARGB.color(ModConfig.hotbarHudAbsorptionColorRed, ModConfig.hotbarHudAbsorptionColorGreen, ModConfig.hotbarHudAbsorptionColorBlue)),
+                () -> ARGB.color(UEConfig.hotbarHudAbsorptionColorRed, UEConfig.hotbarHudAbsorptionColorGreen, UEConfig.hotbarHudAbsorptionColorBlue)),
 
         /*
         ARMOR(clientPlayer -> (float) clientPlayer.getArmor(), clientPlayer -> 20F, 0xb8b9c4, 0xb8b9c4,
@@ -146,9 +146,9 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
         */
 
         HUNGER(clientPlayer -> (float) clientPlayer.getFoodData().getFoodLevel(), clientPlayer -> 20F, 0x00dafe, 0x9d6d43,
-                () -> ARGB.color(ModConfig.hotbarHudHungerColorRed, ModConfig.hotbarHudHungerColorGreen, ModConfig.hotbarHudHungerColorBlue)),
+                () -> ARGB.color(UEConfig.hotbarHudHungerColorRed, UEConfig.hotbarHudHungerColorGreen, UEConfig.hotbarHudHungerColorBlue)),
         EXPERIENCE(clientPlayer -> clientPlayer.experienceProgress * clientPlayer.getXpNeededForNextLevel(), clientPlayer -> (float) clientPlayer.getXpNeededForNextLevel(), 0xb3f37d, 0xb3f37d,
-                () -> ARGB.color(ModConfig.hotbarHudExperienceColorRed, ModConfig.hotbarHudExperienceColorGreen, ModConfig.hotbarHudExperienceColorBlue))
+                () -> ARGB.color(UEConfig.hotbarHudExperienceColorRed, UEConfig.hotbarHudExperienceColorGreen, UEConfig.hotbarHudExperienceColorBlue))
         ;
 
         private final Function<LocalPlayer, Float> currentGetter;
@@ -183,7 +183,7 @@ public class HotbarHud implements HudElement, ClientTickEvents.StartTick {
         }
 
         public int getColor() {
-            return switch (ModConfig.hotbarHudColors) {
+            return switch (UEConfig.hotbarHudColors) {
                 case VANILLA -> ARGB.opaque(this.vanillaColor);
                 case CUSTOM -> ARGB.opaque(this.customColor.get());
                 case null, default -> ARGB.opaque(this.ultrakillColor);

@@ -1,7 +1,7 @@
 package powercyphe.ultraeffects.effect;
 
 import net.minecraft.client.Minecraft;
-import powercyphe.ultraeffects.ModConfig;
+import powercyphe.ultraeffects.UEConfig;
 import powercyphe.ultraeffects.mixin.accessor.MinecraftClientAccessor;
 
 public class FreezeEffect extends TickingEffect {
@@ -13,7 +13,7 @@ public class FreezeEffect extends TickingEffect {
         Minecraft client = Minecraft.getInstance();
         client.getWindow().updateDisplay(((MinecraftClientAccessor) client).ultraeffects$getTracyFrameCapture());
 
-        freezeTicks = ModConfig.parryFreezeTicks + 1;
+        freezeTicks = UEConfig.parryFreezeTicks + 1;
         lastFreezeTicks = freezeTicks;
     }
 

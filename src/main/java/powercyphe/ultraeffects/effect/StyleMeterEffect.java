@@ -8,9 +8,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.Tuple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import powercyphe.ultraeffects.ModConfig;
+import powercyphe.ultraeffects.UEConfig;
 import powercyphe.ultraeffects.registry.ModSounds;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.util.UEUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +49,8 @@ public class StyleMeterEffect extends TickingEffect {
                     this.styleList.remove(6);
                 }
                 this.styleList.addFirst(new Tuple<>(pair.getA(), 140));
-                if (this.shouldDisplay() && ModConfig.styleMeterSound) {
-                    UltraEffectsUtil.playSound(ModSounds.STYLE_METER_CLICK, SoundSource.PLAYERS, 1F, 0.25F);
+                if (this.shouldDisplay() && UEConfig.styleMeterSound) {
+                    UEUtil.playSound(ModSounds.STYLE_METER_CLICK, SoundSource.PLAYERS, 1F, 0.25F);
                 }
             }
             updateStyleRank();
@@ -97,7 +97,7 @@ public class StyleMeterEffect extends TickingEffect {
         if (Minecraft.getInstance().debugEntries.isOverlayVisible()) {
             return false;
         }
-        return switch (ModConfig.styleMeterDisplayCondition) {
+        return switch (UEConfig.styleMeterDisplayCondition) {
             case ALWAYS -> true;
             case ANY_STYLE -> this.style > 0 || !this.styleList.isEmpty();
             case POINTS_ONLY -> this.style > 0;

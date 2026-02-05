@@ -15,11 +15,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import powercyphe.ultraeffects.ModConfig;
+import powercyphe.ultraeffects.UEConfig;
 import powercyphe.ultraeffects.registry.ModSounds;
 import powercyphe.ultraeffects.util.DistanceTravelled;
 import powercyphe.ultraeffects.util.HitEntities;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.util.UEUtil;
 
 @Mixin(Projectile.class)
 public abstract class ProjectileEntityMixin extends Entity implements TraceableEntity, DistanceTravelled, HitEntities {
@@ -47,12 +47,12 @@ public abstract class ProjectileEntityMixin extends Entity implements TraceableE
 
     @Inject(method = "deflect", at = @At("HEAD"))
     private void ultraeffects$parry(ProjectileDeflection deflection, Entity deflector, EntityReference<Entity> lazyEntityReference, boolean fromAttack, CallbackInfoReturnable<Boolean> cir) {
-        if (UltraEffectsUtil.isLocalPlayer(deflector) && fromAttack && deflection == ProjectileDeflection.AIM_DEFLECT) {
+        if (UEUtil.isLocalPlayer(deflector) && fromAttack && deflection == ProjectileDeflection.AIM_DEFLECT) {
             if ((this.parryCooldown + 5) < this.tickCount) {
                 this.parryCooldown = this.tickCount;
 
-                UltraEffectsUtil.parryEffect(ModSounds.PARRY, ModConfig.parryProjectilesEnabled);
-                UltraEffectsUtil.addStyle("parry", 100);
+                UEUtil.parryEffect(ModSounds.PARRY, UEConfig.parryProjectilesEnabled);
+                UEUtil.addStyle("parry", 100);
             }
         }
     }

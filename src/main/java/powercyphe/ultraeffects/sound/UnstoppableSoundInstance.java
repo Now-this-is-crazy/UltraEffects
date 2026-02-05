@@ -5,7 +5,7 @@ import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.util.UEUtil;
 
 public class UnstoppableSoundInstance extends AbstractTickableSoundInstance {
 
@@ -20,7 +20,7 @@ public class UnstoppableSoundInstance extends AbstractTickableSoundInstance {
 
     @Override
     public void tick() {
-        LocalPlayer clientPlayer = UltraEffectsUtil.getLocalPlayer();
+        LocalPlayer clientPlayer = UEUtil.getLocalPlayer();
         if (clientPlayer != null) {
             this.x = clientPlayer.getX();
             this.y = clientPlayer.getY();

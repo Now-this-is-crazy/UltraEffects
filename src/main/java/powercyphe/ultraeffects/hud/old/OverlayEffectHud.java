@@ -1,4 +1,4 @@
-package powercyphe.ultraeffects.hud;
+package powercyphe.ultraeffects.hud.old;
 
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
 import net.minecraft.client.DeltaTracker;

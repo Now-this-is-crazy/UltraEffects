@@ -12,13 +12,13 @@ import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
 import powercyphe.ultraeffects.util.ComboHelper;
 import powercyphe.ultraeffects.util.HitEntities;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.util.UEUtil;
 
 import java.util.List;
 
 public class ProjectileHandler {
     public static void onHit(Projectile projectile, LivingEntity target, DamageSource source, float distanceTravelled) {
-        LocalPlayer clientPlayer = UltraEffectsUtil.getLocalPlayer();
+        LocalPlayer clientPlayer = UEUtil.getLocalPlayer();
 
         if (projectile.getOwner() == clientPlayer) {
             HitEntities hitEntities = (HitEntities) projectile;
@@ -41,19 +41,19 @@ public class ProjectileHandler {
                     type = "slow";
                     points = 20;
                 }
-                UltraEffectsUtil.addStyle("bow_hit" + (type.isEmpty() ? "" : "_" + type), points);
+                UEUtil.addStyle("bow_hit" + (type.isEmpty() ? "" : "_" + type), points);
             }
         }
     }
 
     public static boolean onDeath(Projectile projectile, LivingEntity target, DamageSource source, float distanceTravelled) {
         if (projectile instanceof FireworkRocketEntity firework || source.is(DamageTypes.FIREWORKS)) {
-            UltraEffectsUtil.addStyle("kill_fireworks", 60);
+            UEUtil.addStyle("kill_fireworks", 60);
             return true;
         }
 
         if (projectile instanceof ThrownTrident) {
-            UltraEffectsUtil.addStyle("kill_trident", 60);
+            UEUtil.addStyle("kill_trident", 60);
             return true;
         }
 

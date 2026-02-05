@@ -7,15 +7,15 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
-import powercyphe.ultraeffects.ModConfig;
+import powercyphe.ultraeffects.UEConfig;
 import powercyphe.ultraeffects.registry.ModSounds;
 import powercyphe.ultraeffects.util.ComboHelper;
 import powercyphe.ultraeffects.util.DistanceTravelled;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.util.UEUtil;
 
 public class DamageHandler {
     public static void onDamaged(Entity target, DamageSource source) {
-        LocalPlayer clientPlayer = UltraEffectsUtil.getLocalPlayer();
+        LocalPlayer clientPlayer = UEUtil.getLocalPlayer();
         Entity attacker = source.getEntity();
 
         if (target instanceof LivingEntity livingEntity) {
@@ -28,7 +28,7 @@ public class DamageHandler {
 
             // Lightning (Channeling)
             if (source.is(DamageTypeTags.IS_LIGHTNING)) {
-                UltraEffectsUtil.addStyle("lightning_strike", 40);
+                UEUtil.addStyle("lightning_strike", 40);
             }
 
             // Melee Attacks
@@ -36,8 +36,8 @@ public class DamageHandler {
                 ComboHelper.MELEE.increase(target);
 
                 if (source.is(DamageTypes.MACE_SMASH)) {
-                    UltraEffectsUtil.parryEffect(ModSounds.HAMMER_IMPACT, ModConfig.parryMaceEnabled, true);
-                    UltraEffectsUtil.addStyle("mace_smash", 100);
+                    UEUtil.parryEffect(ModSounds.HAMMER_IMPACT, UEConfig.parryMaceEnabled, true);
+                    UEUtil.addStyle("mace_smash", 100);
                 }
             }
 

@@ -7,14 +7,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.util.UEUtil;
 
 @Mixin(Gui.class)
 public class InGameHudMixin {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private void ultraeffects$death_sequence(GuiGraphics context, DeltaTracker tickCounter, CallbackInfo ci) {
-        if (UltraEffectsUtil.isRunningDeathScreenOverhaul()) {
+        if (UEUtil.isRunningDeathScreenOverhaul()) {
             ci.cancel();
         }
     }

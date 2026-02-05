@@ -1,11 +1,11 @@
-package powercyphe.ultraeffects.hud.state;
+package powercyphe.ultraeffects.hud.old.state;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import org.joml.Math;
-import powercyphe.ultraeffects.hud.HotbarHud;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.hud.old.HotbarHud;
+import powercyphe.ultraeffects.util.UEUtil;
 
 public record HotbarHudBarRenderState(float currentValue, float smoothedCurrent, float smoothedPrevious, float maxValue, boolean hasOverlay, int overlayTick, float additionalValue, int width, int height, int cuts, int cutWidth, int color, int backgroundColor) {
     public static final HotbarHudBarRenderState DEFAULT = new HotbarHudBarRenderState(0, 0, 0, 1, 0, 0, 0, 0, -1, -1);
@@ -33,9 +33,9 @@ public record HotbarHudBarRenderState(float currentValue, float smoothedCurrent,
 
     private void renderBaseBar(HotbarHudRenderState state, GuiGraphics context, int x, int y, float tickProgress, boolean hasBackground) {
         if (hasBackground) {
-            UltraEffectsUtil.renderHorizontalColoredBar(context, x, y, 1, this.width, this.height, state.adjustColor(this.backgroundColor), this.cuts, this.cutWidth);
+            UEUtil.renderHorizontalColoredBar(context, x, y, 1, this.width, this.height, state.adjustColor(this.backgroundColor), this.cuts, this.cutWidth);
         }
-        UltraEffectsUtil.renderHorizontalColoredBar(context, x, y, this.getProgress(tickProgress), this.width, this.height, state.adjustColor(this.color), this.cuts, this.cutWidth);
+        UEUtil.renderHorizontalColoredBar(context, x, y, this.getProgress(tickProgress), this.width, this.height, state.adjustColor(this.color), this.cuts, this.cutWidth);
     }
 
     private void renderOverlayBar(HotbarHudRenderState state, GuiGraphics context, int x, int y, float tickProgress) {
@@ -44,7 +44,7 @@ public record HotbarHudBarRenderState(float currentValue, float smoothedCurrent,
         float alpha = Math.abs(Math.sin(Math.toRadians((this.overlayTick + tickProgress) / 50F * 360F)));
         int overlayColor = state.adjustColor(ARGB.color(Mth.lerp(alpha, 0F, 0.5F), this.color));
 
-        UltraEffectsUtil.renderHorizontalColoredBar(context, x, y, this.getOverlayProgress(tickProgress), this.width, this.height, overlayColor, this.cuts, this.cutWidth);
+        UEUtil.renderHorizontalColoredBar(context, x, y, this.getOverlayProgress(tickProgress), this.width, this.height, overlayColor, this.cuts, this.cutWidth);
     }
 
     // Helper Methods

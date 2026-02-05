@@ -70,7 +70,7 @@ public class ComboHelper {
             this.ticks = this.defaultTicks;
 
             if (this.combo >= this.required) {
-                UltraEffectsUtil.addStyle(Component.translatable("ultraeffects.style_meter.style.combo_" + this.id, this.combo), this.pointCalculation.apply(this.combo));
+                UEUtil.addStyle(Component.translatable("ultraeffects.style_meter.style.combo_" + this.id, this.combo), this.pointCalculation.apply(this.combo));
                 return true;
             }
             return false;
@@ -85,7 +85,7 @@ public class ComboHelper {
             this.ticks = this.defaultTicks;
 
             if (this.combo >= this.required) {
-                UltraEffectsUtil.addStyle(Component.translatable("ultraeffects.style_meter.style.combo_" + this.id, this.combo), this.pointCalculation.apply(this.combo));
+                UEUtil.addStyle(Component.translatable("ultraeffects.style_meter.style.combo_" + this.id, this.combo), this.pointCalculation.apply(this.combo));
                 return true;
             }
             return false;

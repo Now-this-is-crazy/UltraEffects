@@ -3,9 +3,9 @@ package powercyphe.ultraeffects.effect;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;
-import powercyphe.ultraeffects.ModConfig;
+import powercyphe.ultraeffects.UEConfig;
 import powercyphe.ultraeffects.registry.EffectRegistry;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.util.UEUtil;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class FlashEffect extends OverlayEffect {
     public void display() {
         setRandomOverlay();
 
-        flashTicks = ModConfig.parryFlashTicks;
+        flashTicks = UEConfig.parryFlashTicks;
         lastFlashTicks = flashTicks;
     }
 
@@ -32,13 +32,13 @@ public class FlashEffect extends OverlayEffect {
     @Override
     public void render(GuiGraphics ctx, DeltaTracker tickCounter) {
         if (this.flashTicks > 0) {
-            UltraEffectsUtil.renderOverlay(ctx, this.getOverlay(), this.getOpacity());
+            UEUtil.renderOverlay(ctx, this.getOverlay(), this.getOpacity());
         }
     }
 
     @Override
     public List<Identifier> getAllOverlays() {
-        return UltraEffectsUtil.stringToIdentifierList(ModConfig.parryImages);
+        return UEUtil.stringToIdentifierList(UEConfig.parryImages);
     }
 
     @Override

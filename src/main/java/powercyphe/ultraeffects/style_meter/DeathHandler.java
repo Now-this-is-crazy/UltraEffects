@@ -9,14 +9,14 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.TridentItem;
 import powercyphe.ultraeffects.util.ComboHelper;
 import powercyphe.ultraeffects.util.DistanceTravelled;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.util.UEUtil;
 
 public class DeathHandler {
     public static void onDeath(LivingEntity target, DamageSource source) {
-        LocalPlayer clientPlayer = UltraEffectsUtil.getLocalPlayer();
+        LocalPlayer clientPlayer = UEUtil.getLocalPlayer();
         if (source != null && target != clientPlayer) {
 
-            if ((source.getEntity() == UltraEffectsUtil.getLocalPlayer() || source.getDirectEntity() == UltraEffectsUtil.getLocalPlayer())) {
+            if ((source.getEntity() == UEUtil.getLocalPlayer() || source.getDirectEntity() == UEUtil.getLocalPlayer())) {
                 boolean bl = ComboHelper.KILL.increase(target);
 
                 if (!bl) {
@@ -42,7 +42,7 @@ public class DeathHandler {
                             points = 80;
                         }
                     }
-                    UltraEffectsUtil.addStyle("kill" + (type.isEmpty() ? "" : "_" + type), points);
+                    UEUtil.addStyle("kill" + (type.isEmpty() ? "" : "_" + type), points);
                     return;
 
                 }

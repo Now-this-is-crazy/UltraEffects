@@ -2,13 +2,13 @@ package powercyphe.ultraeffects;
 
 import com.mojang.datafixers.util.Function3;
 import eu.midnightdust.lib.config.MidnightConfig;
-import powercyphe.ultraeffects.hud.state.HotbarHudBarRenderState;
+import powercyphe.ultraeffects.hud.old.state.HotbarHudBarRenderState;
 
 import java.util.Arrays;
 import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class ModConfig extends MidnightConfig {
+public class UEConfig extends MidnightConfig {
 
     // Parries & Mace Hits
     @Entry(category = "parry", min = 0, max = 20)

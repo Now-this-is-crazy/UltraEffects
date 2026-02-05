@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
-import powercyphe.ultraeffects.ModConfig;
-import powercyphe.ultraeffects.hud.DeathScreenHud;
+import powercyphe.ultraeffects.UEConfig;
+import powercyphe.ultraeffects.hud.old.DeathScreenHud;
 import powercyphe.ultraeffects.mixin.accessor.DeathScreenAccessor;
 
 @Mixin(DeathScreen.class)
@@ -42,7 +42,7 @@ public abstract class DeathScreenMixin extends Screen implements DeathScreenAcce
 
     @ModifyArgs(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/Button$Builder;bounds(IIII)Lnet/minecraft/client/gui/components/Button$Builder;", ordinal = 0))
     private void ultraeffects$respawnButton(Args args) {
-        if (ModConfig.deathScreenOverhaul) {
+        if (UEConfig.deathScreenOverhaul) {
             args.set(0, 110);
             args.set(1, this.height - 36);
         }
@@ -50,7 +50,7 @@ public abstract class DeathScreenMixin extends Screen implements DeathScreenAcce
 
     @ModifyArgs(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/Button$Builder;bounds(IIII)Lnet/minecraft/client/gui/components/Button$Builder;", ordinal = 1))
     private void ultraeffects$titleScreenButton(Args args) {
-        if (ModConfig.deathScreenOverhaul) {
+        if (UEConfig.deathScreenOverhaul) {
             args.set(0, this.width - 310);
             args.set(1, this.height - 36);
         }
@@ -64,12 +64,12 @@ public abstract class DeathScreenMixin extends Screen implements DeathScreenAcce
 
     @WrapWithCondition(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/DeathScreen;setButtonsActive(Z)V"))
     private boolean ultraeffects$death_sequence(DeathScreen screen, boolean active) {
-        return !ModConfig.deathScreenOverhaul;
+        return !UEConfig.deathScreenOverhaul;
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;tick()V"))
     private void ultraeffects$death_sequence(CallbackInfo ci) {
-        if (ModConfig.deathScreenOverhaul && this.delayTicker > DeathScreenHud.SEQUENCE_TICKS) {
+        if (UEConfig.deathScreenOverhaul && this.delayTicker > DeathScreenHud.SEQUENCE_TICKS) {
             this.setButtonsActive(true);
         }
     }
@@ -81,7 +81,7 @@ public abstract class DeathScreenMixin extends Screen implements DeathScreenAcce
 
     @WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V"))
     private boolean ultraeffects$death_sequence(Screen screen, GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
-        if (ModConfig.deathScreenOverhaul) {
+        if (UEConfig.deathScreenOverhaul) {
             this.deathScreenHud.render(context, this.font, this.delayTicker);
             return this.delayTicker > DeathScreenHud.SEQUENCE_TICKS;
         }
@@ -90,7 +90,7 @@ public abstract class DeathScreenMixin extends Screen implements DeathScreenAcce
 
     @ModifyArgs(method = "renderDeathBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fillGradient(IIIIII)V"))
     private static void ultraeffects$death_sequence(Args args) {
-        if (ModConfig.deathScreenOverhaul) {
+        if (UEConfig.deathScreenOverhaul) {
             Minecraft client = Minecraft.getInstance();
 
             float alpha = 0.75F;
@@ -111,12 +111,12 @@ public abstract class DeathScreenMixin extends Screen implements DeathScreenAcce
 
     @WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/DeathScreen;visitText(Lnet/minecraft/client/gui/ActiveTextCollector;)V"))
     private boolean ultraeffects$death_sequence(DeathScreen instance, ActiveTextCollector activeTextCollector) {
-        return !ModConfig.deathScreenOverhaul;
+        return !UEConfig.deathScreenOverhaul;
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V", shift = At.Shift.AFTER), cancellable = true)
     private void ultraeffects$death_sequence(GuiGraphics context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
-        if (ModConfig.deathScreenOverhaul && this.delayTicker > DeathScreenHud.SEQUENCE_TICKS) {
+        if (UEConfig.deathScreenOverhaul && this.delayTicker > DeathScreenHud.SEQUENCE_TICKS) {
             ci.cancel();
         }
     }

@@ -1,4 +1,4 @@
-package powercyphe.ultraeffects.hud;
+package powercyphe.ultraeffects.hud.old;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
@@ -12,7 +12,7 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.CommonColors;
 import powercyphe.ultraeffects.UltraEffectsClient;
 import powercyphe.ultraeffects.registry.ModSounds;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.util.UEUtil;
 
 public class DeathScreenHud {
 
@@ -21,7 +21,7 @@ public class DeathScreenHud {
     private boolean shouldPlaySound = true;
 
     public void render(GuiGraphics context, Font textRenderer, int ticksSinceDeath) {
-        LocalPlayer clientPlayer = UltraEffectsUtil.getLocalPlayer();
+        LocalPlayer clientPlayer = UEUtil.getLocalPlayer();
 
         if (ticksSinceDeath > SEQUENCE_TICKS) {
             context.fill(0, 0, context.guiWidth(), context.guiHeight(), CommonColors.BLACK);
@@ -32,7 +32,7 @@ public class DeathScreenHud {
             context.blit(RenderPipelines.GUI_TEXTURED, texture, context.guiWidth() / 2 - 128, context.guiHeight() / 2 - 128, 0, 0, 256, 256, 256, 256);
             if (this.shouldPlaySound && talking && clientPlayer != null) {
                 this.shouldPlaySound = false;
-                UltraEffectsUtil.playSound(ModSounds.DEATH_SKULL, SoundSource.PLAYERS, 1F, 0.5F);
+                UEUtil.playSound(ModSounds.DEATH_SKULL, SoundSource.PLAYERS, 1F, 0.5F);
             } else if (!talking) {
                 this.shouldPlaySound = true;
             }
@@ -47,14 +47,14 @@ public class DeathScreenHud {
             if (clientPlayer != null) {
                 if (this.shouldPlaySound && ticksSinceDeath == 1) {
                     this.shouldPlaySound = false;
-                    UltraEffectsUtil.playSound(ModSounds.DEATH_SEQUENCE, SoundSource.PLAYERS, 1F, 0.5F);
+                    UEUtil.playSound(ModSounds.DEATH_SEQUENCE, SoundSource.PLAYERS, 1F, 0.5F);
                 } else {
                     if (!this.shouldPlaySound && ticksSinceDeath == SEQUENCE_TICKS - 1) {
                         this.shouldPlaySound = true;
 
                     } else if (this.shouldPlaySound && ticksSinceDeath == SEQUENCE_TICKS) {
                         this.shouldPlaySound = false;
-                        UltraEffectsUtil.playSound(ModSounds.DEATH_SEQUENCE_END, SoundSource.PLAYERS, 1F, 1F);
+                        UEUtil.playSound(ModSounds.DEATH_SEQUENCE_END, SoundSource.PLAYERS, 1F, 1F);
                     }
                 }
             }

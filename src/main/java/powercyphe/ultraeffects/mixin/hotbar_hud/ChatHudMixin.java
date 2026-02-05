@@ -7,9 +7,9 @@ import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import powercyphe.ultraeffects.ModConfig;
-import powercyphe.ultraeffects.hud.HotbarHud;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.UEConfig;
+import powercyphe.ultraeffects.hud.old.HotbarHud;
+import powercyphe.ultraeffects.util.UEUtil;
 
 @Mixin(ChatComponent.class)
 public class ChatHudMixin {
@@ -23,10 +23,10 @@ public class ChatHudMixin {
     private int ultraeffects$getChatShift() {
         ChatComponent hud = (ChatComponent) (Object) this;
         Minecraft client = Minecraft.getInstance();
-        LocalPlayer clientPlayer = UltraEffectsUtil.getLocalPlayer();
+        LocalPlayer clientPlayer = UEUtil.getLocalPlayer();
 
         if (HotbarHud.getRenderState().shouldShiftChat(client)) {
-            return (clientPlayer.isCreative() ? 15 : 0) + switch (ModConfig.hotbarHudChatFocusModification) {
+            return (clientPlayer.isCreative() ? 15 : 0) + switch (UEConfig.hotbarHudChatFocusModification) {
                 case SHIFTED_CHAT -> -73;
                 case null, default -> hud.isChatFocused() ? 0 : -73;
             };

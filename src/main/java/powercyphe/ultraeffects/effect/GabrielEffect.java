@@ -5,10 +5,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
-import powercyphe.ultraeffects.ModConfig;
+import powercyphe.ultraeffects.UEConfig;
 import powercyphe.ultraeffects.registry.EffectRegistry;
 import powercyphe.ultraeffects.registry.ModSounds;
-import powercyphe.ultraeffects.util.UltraEffectsUtil;
+import powercyphe.ultraeffects.util.UEUtil;
 
 import java.util.List;
 
@@ -19,14 +19,14 @@ public class GabrielEffect extends OverlayEffect {
     public void display() {
         setRandomOverlay();
 
-        waitTicks = ModConfig.gabrielWaitTicks;
-        fadeTicks = ModConfig.gabrielFlashTicks;
+        waitTicks = UEConfig.gabrielWaitTicks;
+        fadeTicks = UEConfig.gabrielFlashTicks;
         lastFadeTicks = fadeTicks;
     }
 
     @Override
     public void tick() {
-        LocalPlayer player = UltraEffectsUtil.getLocalPlayer();
+        LocalPlayer player = UEUtil.getLocalPlayer();
 
         if (!EffectRegistry.FREEZE_EFFECT.shouldPause()) {
             if (fadeTicks > 0) {
@@ -36,13 +36,13 @@ public class GabrielEffect extends OverlayEffect {
                     waitTicks--;
                 } else if (player != null) {
                     float threshold;
-                    switch (ModConfig.gabrielThresholdMode) {
-                        case HEALTH_PERCENTAGE -> threshold = (player.getMaxHealth() * ((float) ModConfig.gabrielThreshold / 100));
-                        case null, default -> threshold = ModConfig.gabrielThreshold;
+                    switch (UEConfig.gabrielThresholdMode) {
+                        case HEALTH_PERCENTAGE -> threshold = (player.getMaxHealth() * ((float) UEConfig.gabrielThreshold / 100));
+                        case null, default -> threshold = UEConfig.gabrielThreshold;
                     }
 
                     if (!player.isDeadOrDying() && player.getHealth() <= threshold) {
-                        UltraEffectsUtil.playSound(ModSounds.GABRIEL, SoundSource.PLAYERS, 1F, 0.5F);
+                        UEUtil.playSound(ModSounds.GABRIEL, SoundSource.PLAYERS, 1F, 0.5F);
                         display();
                     }
                 }
@@ -53,13 +53,13 @@ public class GabrielEffect extends OverlayEffect {
     @Override
     public void render(GuiGraphics ctx, DeltaTracker tickCounter) {
         if (this.fadeTicks > 0) {
-            UltraEffectsUtil.renderOverlay(ctx, this.getOverlay(), this.getOpacity());
+            UEUtil.renderOverlay(ctx, this.getOverlay(), this.getOpacity());
         }
     }
 
     @Override
     public List<Identifier> getAllOverlays() {
-        return UltraEffectsUtil.stringToIdentifierList(ModConfig.gabrielImages);
+        return UEUtil.stringToIdentifierList(UEConfig.gabrielImages);
     }
 
     @Override

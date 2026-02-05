@@ -15,7 +15,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Math;
-import powercyphe.ultraeffects.ModConfig;
+import powercyphe.ultraeffects.UEConfig;
 import powercyphe.ultraeffects.UltraEffectsClient;
 import powercyphe.ultraeffects.effect.OverlayEffect;
 import powercyphe.ultraeffects.registry.EffectRegistry;
@@ -23,7 +23,7 @@ import powercyphe.ultraeffects.sound.UnstoppableSoundInstance;
 
 import java.util.List;
 
-public class UltraEffectsUtil {
+public class UEUtil {
 
     public static void renderHorizontalColoredBar(GuiGraphics context, int x, int y, float progress, int fullWidth, int height, int color, int cuts, int cutWidth) {
         if (progress > 0) {
@@ -160,13 +160,13 @@ public class UltraEffectsUtil {
         if (disableForTick) {
             UltraEffectsClient.PARRY_DISABLED = true;
         }
-        UltraEffectsUtil.playSound(sound, SoundSource.PLAYERS, 0.9F + RandomSource.create().nextInt(4) * 0.05F, 1F);
+        UEUtil.playSound(sound, SoundSource.PLAYERS, 0.9F + RandomSource.create().nextInt(4) * 0.05F, 1F);
         EffectRegistry.FREEZE_EFFECT.display();
         EffectRegistry.FLASH_EFFECT.display();
     }
 
     public static boolean isRunningDeathScreenOverhaul() {
-        return Minecraft.getInstance().screen instanceof DeathScreen && ModConfig.deathScreenOverhaul;
+        return Minecraft.getInstance().screen instanceof DeathScreen && UEConfig.deathScreenOverhaul;
     }
 
     public static boolean isLocalPlayer(Entity entity) {
